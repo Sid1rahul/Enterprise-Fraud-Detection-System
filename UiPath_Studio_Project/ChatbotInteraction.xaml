@@ -1,0 +1,171 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="ChatbotInteraction" VisualBasic.Settings="{x:Null}" sap:VirtualizedContainerService.HintSize="1184,1856" sap2010:WorkflowViewState.IdRef="ActivityBuilder_1" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation/options" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=System.Private.CoreLib" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>GlobalVariablesNamespace</x:String>
+      <x:String>GlobalConstantsNamespace</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>System.Private.CoreLib</AssemblyReference>
+      <AssemblyReference>System.Activities.Core.Presentation</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic.Core</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.ValueTuple</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Drawing.Common</AssemblyReference>
+      <AssemblyReference>System.Drawing.Primitives</AssemblyReference>
+      <AssemblyReference>System.ObjectModel</AssemblyReference>
+      <AssemblyReference>System.Private.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Studio.Constants</AssemblyReference>
+      <AssemblyReference>System.Private.DataContractSerialization</AssemblyReference>
+      <AssemblyReference>UiPath.WebAPI.Activities</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence DisplayName="Chatbot Interaction Workflow" sap:VirtualizedContainerService.HintSize="1154,1791" sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="x:String" Name="chatbotMessage" />
+      <Variable x:TypeArguments="x:String" Name="testQueries" />
+      <Variable x:TypeArguments="x:String" Name="currentQuery" />
+      <Variable x:TypeArguments="x:Boolean" Name="chatbotVisible" />
+    </Sequence.Variables>
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+
+    <ui:LogMessage DisplayName="Log Chatbot Test Start" sap:VirtualizedContainerService.HintSize="1112,91" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="[&quot;🤖 Starting Chatbot Interaction Tests&quot;]" />
+
+    <!-- Open Chatbot -->
+    <TryCatch DisplayName="Open Chatbot" sap:VirtualizedContainerService.HintSize="1112,1608" sap2010:WorkflowViewState.IdRef="TryCatch_1">
+      <TryCatch.Try>
+        <Sequence DisplayName="Chatbot Interaction Sequence" sap:VirtualizedContainerService.HintSize="1078,1516" sap2010:WorkflowViewState.IdRef="Sequence_2">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+
+          <!-- Click Chatbot Icon -->
+          <ui:Click DelayBefore="{x:Null}" DelayAfter="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click Chatbot Icon" sap:VirtualizedContainerService.HintSize="1036,107" sap2010:WorkflowViewState.IdRef="Click_1" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
+            <ui:Click.Target>
+              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="b2c3d4e5-6f7a-8b9c-0d1e-2f3a4b5c6d7e" InformativeScreenshot="4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c.png" Selector="&lt;webctrl tag='BUTTON' class='chatbot-toggle' /&gt;" WaitForReady="INTERACTIVE">
+                <ui:Target.TimeoutMS>
+                  <InArgument x:TypeArguments="x:Int32">5000</InArgument>
+                </ui:Target.TimeoutMS>
+              </ui:Target>
+            </ui:Click.Target>
+          </ui:Click>
+
+          <Delay DisplayName="Wait for Chatbot Open" Duration="00:00:02" sap:VirtualizedContainerService.HintSize="1036,88" sap2010:WorkflowViewState.IdRef="Delay_1" />
+
+          <!-- Test Different Queries -->
+          <ui:ForEach x:TypeArguments="x:String" CurrentIndex="{x:Null}" DisplayName="Test Chatbot Queries" sap:VirtualizedContainerService.HintSize="1036,1229" sap2010:WorkflowViewState.IdRef="ForEach`1_1" Values="[{&quot;Hello&quot;, &quot;Check $500 transaction at Amazon&quot;, &quot;Show system status&quot;, &quot;Thank you&quot;, &quot;Goodbye&quot;}]">
+            <ui:ForEach.Body>
+              <ActivityAction x:TypeArguments="x:String">
+                <ActivityAction.Argument>
+                  <DelegateInArgument x:TypeArguments="x:String" Name="query" />
+                </ActivityAction.Argument>
+                <Sequence DisplayName="Send Query to Chatbot" sap:VirtualizedContainerService.HintSize="1002,1137" sap2010:WorkflowViewState.IdRef="Sequence_3">
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+
+                  <ui:LogMessage DisplayName="Log Current Query" sap:VirtualizedContainerService.HintSize="960,91" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Info" Message="[&quot;💬 Testing query: &quot; + query]" />
+
+                  <!-- Type in Chatbot Input -->
+                  <ui:TypeInto DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayAfter="{x:Null}" Activate="True" ClickBeforeTyping="True" DisplayName="Type Query" EmptyField="True" sap:VirtualizedContainerService.HintSize="960,134" sap2010:WorkflowViewState.IdRef="TypeInto_1" SendWindowMessages="False" SimulateType="True" Text="[query]">
+                    <ui:TypeInto.Target>
+                      <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="c3d4e5f6-7a8b-9c0d-1e2f-3a4b5c6d7e8f" InformativeScreenshot="5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d.png" Selector="&lt;webctrl tag='INPUT' class='chat-input' /&gt;" WaitForReady="INTERACTIVE">
+                        <ui:Target.TimeoutMS>
+                          <InArgument x:TypeArguments="x:Int32">5000</InArgument>
+                        </ui:Target.TimeoutMS>
+                      </ui:Target>
+                    </ui:TypeInto.Target>
+                  </ui:TypeInto>
+
+                  <!-- Send Message -->
+                  <ui:SendHotkey DelayBefore="{x:Null}" DelayAfter="{x:Null}" Activate="True" ClickBeforeTyping="False" DisplayName="Send Message (Enter)" sap:VirtualizedContainerService.HintSize="960,107" sap2010:WorkflowViewState.IdRef="SendHotkey_1" Key="enter" KeyModifiers="None" SendWindowMessages="False" SpecialKey="True">
+                    <ui:SendHotkey.Target>
+                      <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="d4e5f6a7-8b9c-0d1e-2f3a-4b5c6d7e8f9a" InformativeScreenshot="6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e.png" Selector="&lt;webctrl tag='INPUT' class='chat-input' /&gt;" WaitForReady="INTERACTIVE">
+                        <ui:Target.TimeoutMS>
+                          <InArgument x:TypeArguments="x:Int32">3000</InArgument>
+                        </ui:Target.TimeoutMS>
+                      </ui:Target>
+                    </ui:SendHotkey.Target>
+                  </ui:SendHotkey>
+
+                  <!-- Wait for Response -->
+                  <Delay DisplayName="Wait for Bot Response" Duration="00:00:03" sap:VirtualizedContainerService.HintSize="960,88" sap2010:WorkflowViewState.IdRef="Delay_2" />
+
+                  <!-- Take Screenshot of Response -->
+                  <ui:TakeScreenshot DisplayName="Capture Chatbot Response" sap:VirtualizedContainerService.HintSize="960,107" sap2010:WorkflowViewState.IdRef="TakeScreenshot_1" FilePath="[&quot;C:\CFD\UiPath_Screenshots\chatbot_response_&quot; + DateTime.Now.ToString(&quot;yyyyMMdd_HHmmss&quot;) + &quot;.png&quot;]">
+                    <ui:TakeScreenshot.Target>
+                      <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="e5f6a7b8-9c0d-1e2f-3a4b-5c6d7e8f9a0b" InformativeScreenshot="7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f.png" Selector="&lt;webctrl tag='DIV' class='chat-messages' /&gt;" WaitForReady="INTERACTIVE">
+                        <ui:Target.TimeoutMS>
+                          <InArgument x:TypeArguments="x:Int32">3000</InArgument>
+                        </ui:Target.TimeoutMS>
+                      </ui:Target>
+                    </ui:TakeScreenshot.Target>
+                  </ui:TakeScreenshot>
+
+                  <ui:LogMessage DisplayName="Log Query Complete" sap:VirtualizedContainerService.HintSize="960,91" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Info" Message="[&quot;✅ Query completed: &quot; + query]" />
+
+                  <!-- Small delay between queries -->
+                  <Delay DisplayName="Delay Between Queries" Duration="00:00:02" sap:VirtualizedContainerService.HintSize="960,88" sap2010:WorkflowViewState.IdRef="Delay_3" />
+                </Sequence>
+              </ActivityAction>
+            </ui:ForEach.Body>
+          </ui:ForEach>
+        </Sequence>
+      </TryCatch.Try>
+      <TryCatch.Catches>
+        <Catch x:TypeArguments="x:Exception" sap:VirtualizedContainerService.HintSize="1078,21" sap2010:WorkflowViewState.IdRef="Catch`1_1">
+          <ActivityAction x:TypeArguments="x:Exception">
+            <ActivityAction.Argument>
+              <DelegateInArgument x:TypeArguments="x:Exception" Name="exception" />
+            </ActivityAction.Argument>
+            <ui:LogMessage DisplayName="Log Chatbot Error" sap:VirtualizedContainerService.HintSize="1036,91" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Error" Message="[&quot;❌ Chatbot interaction failed: &quot; + exception.Message]" />
+          </ActivityAction>
+        </Catch>
+      </TryCatch.Catches>
+    </TryCatch>
+  </Sequence>
+</Activity>

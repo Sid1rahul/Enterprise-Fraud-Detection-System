@@ -1,0 +1,13 @@
+﻿{
+  "Name": "Edge Fraud Detection System",
+  "Type": "Screen",
+  "Id": "BykFsRDHAki74lqDDmZ-3w",
+  "Reference": "2l4W1lvR7EKbTHgwBcIsiA/BykFsRDHAki74lqDDmZ-3w",
+  "ParentRef": "2l4W1lvR7EKbTHgwBcIsiA/zCMtDtzaX0S1b4jBozePPA",
+  "Created": "2025-10-18T06:43:37.8260824Z",
+  "Updated": "2025-10-18T06:43:37.8260824Z",
+  "CreatedBy": [
+    "UiPath.UIAutomationCore, Version=25.10.16.0, Culture=neutral, PublicKeyToken=null",
+    "UiPath.Platform, Version=25.10.1.0, Culture=neutral, PublicKeyToken=null"
+  ]
+}

@@ -1,0 +1,193 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="Main" VisualBasic.Settings="{x:Null}" sap:VirtualizedContainerService.HintSize="1184,2312" sap2010:WorkflowViewState.IdRef="ActivityBuilder_1" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation/options" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=System.Private.CoreLib" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>GlobalVariablesNamespace</x:String>
+      <x:String>GlobalConstantsNamespace</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>System.Private.CoreLib</AssemblyReference>
+      <AssemblyReference>System.Activities.Core.Presentation</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic.Core</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.ValueTuple</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Drawing.Common</AssemblyReference>
+      <AssemblyReference>System.Drawing.Primitives</AssemblyReference>
+      <AssemblyReference>System.ObjectModel</AssemblyReference>
+      <AssemblyReference>System.Private.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Studio.Constants</AssemblyReference>
+      <AssemblyReference>System.Private.DataContractSerialization</AssemblyReference>
+      <AssemblyReference>UiPath.Excel.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Mail.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.WebAPI.Activities</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence DisplayName="Fraud Detection Chatbot Main Workflow" sap:VirtualizedContainerService.HintSize="1154,2247" sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="x:String" Name="chatbotUrl" />
+      <Variable x:TypeArguments="x:String" Name="apiEndpoint" />
+      <Variable x:TypeArguments="x:String" Name="userMessage" />
+      <Variable x:TypeArguments="x:String" Name="botResponse" />
+      <Variable x:TypeArguments="x:String" Name="transactionData" />
+      <Variable x:TypeArguments="x:String" Name="fraudResult" />
+      <Variable x:TypeArguments="x:Boolean" Name="isConnected" />
+    </Sequence.Variables>
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    
+    <!-- Initialize Variables -->
+    <Assign DisplayName="Set Chatbot URL" sap:VirtualizedContainerService.HintSize="1112,82" sap2010:WorkflowViewState.IdRef="Assign_1">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[chatbotUrl]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">"http://localhost:3000"</InArgument>
+      </Assign.Value>
+    </Assign>
+    
+    <Assign DisplayName="Set API Endpoint" sap:VirtualizedContainerService.HintSize="1112,82" sap2010:WorkflowViewState.IdRef="Assign_2">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[apiEndpoint]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">"http://localhost:5000/api"</InArgument>
+      </Assign.Value>
+    </Assign>
+
+    <!-- Log Start -->
+    <ui:LogMessage DisplayName="Log Workflow Start" sap:VirtualizedContainerService.HintSize="1112,91" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="[&quot;🚀 Starting Fraud Detection Chatbot Integration Workflow&quot;]" />
+
+    <!-- Open Browser and Navigate to Chatbot -->
+    <ui:OpenBrowser AutomaticallyDownloadWebDriver="{x:Null}" CommunicationMethod="{x:Null}" Hidden="{x:Null}" NewSession="{x:Null}" Private="{x:Null}" UiBrowser="{x:Null}" BrowserType="Chrome" DisplayName="Open Fraud Detection System" sap:VirtualizedContainerService.HintSize="1112,1851" sap2010:WorkflowViewState.IdRef="OpenBrowser_1" Url="[chatbotUrl]">
+      <ui:OpenBrowser.Body>
+        <ActivityAction x:TypeArguments="x:Object">
+          <ActivityAction.Argument>
+            <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
+          </ActivityAction.Argument>
+          
+          <Sequence DisplayName="Browser Automation Sequence" sap:VirtualizedContainerService.HintSize="1078,1759" sap2010:WorkflowViewState.IdRef="Sequence_2">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+
+            <!-- Wait for Page Load -->
+            <ui:LogMessage DisplayName="Log Page Loading" sap:VirtualizedContainerService.HintSize="1036,91" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Info" Message="[&quot;📄 Loading Fraud Detection System Dashboard...&quot;]" />
+            
+            <Delay DisplayName="Wait for Page Load" Duration="00:00:05" sap:VirtualizedContainerService.HintSize="1036,88" sap2010:WorkflowViewState.IdRef="Delay_1" />
+
+            <!-- Try to Login as Demo User -->
+            <TryCatch DisplayName="Login Process" sap:VirtualizedContainerService.HintSize="1036,1488" sap2010:WorkflowViewState.IdRef="TryCatch_1">
+              <TryCatch.Try>
+                <Sequence DisplayName="Login Sequence" sap:VirtualizedContainerService.HintSize="1002,1396" sap2010:WorkflowViewState.IdRef="Sequence_3">
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+
+                  <!-- Check if Login Page is Present -->
+                  <ui:ElementExists DisplayName="Check Login Page" Exists="[isConnected]" sap:VirtualizedContainerService.HintSize="960,107" sap2010:WorkflowViewState.IdRef="ElementExists_1">
+                    <ui:ElementExists.Target>
+                      <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="d4c8b2a1-7f3e-4d5c-9b8a-1e6f2c3d4e5f" InformativeScreenshot="2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d.png" Selector="&lt;webctrl tag='BUTTON' text='Admin Access' /&gt;" WaitForReady="INTERACTIVE">
+                        <ui:Target.TimeoutMS>
+                          <InArgument x:TypeArguments="x:Int32">10000</InArgument>
+                        </ui:Target.TimeoutMS>
+                      </ui:Target>
+                    </ui:ElementExists.Target>
+                  </ui:ElementExists>
+
+                  <!-- Login as Admin if Login Page Exists -->
+                  <If Condition="[isConnected]" DisplayName="If Login Required" sap:VirtualizedContainerService.HintSize="960,1197" sap2010:WorkflowViewState.IdRef="If_1">
+                    <If.Then>
+                      <Sequence DisplayName="Perform Login" sap:VirtualizedContainerService.HintSize="926,1105" sap2010:WorkflowViewState.IdRef="Sequence_4">
+                        <sap:WorkflowViewStateService.ViewState>
+                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                          </scg:Dictionary>
+                        </sap:WorkflowViewStateService.ViewState>
+
+                        <ui:LogMessage DisplayName="Log Login Attempt" sap:VirtualizedContainerService.HintSize="884,91" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Info" Message="[&quot;🔐 Attempting Admin Login...&quot;]" />
+
+                        <!-- Click Admin Demo Button -->
+                        <ui:Click DelayBefore="{x:Null}" DelayAfter="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click Admin Login" sap:VirtualizedContainerService.HintSize="884,107" sap2010:WorkflowViewState.IdRef="Click_1" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
+                          <ui:Click.Target>
+                            <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="a1b2c3d4-5e6f-7a8b-9c0d-1e2f3a4b5c6d" InformativeScreenshot="3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b.png" Selector="&lt;webctrl tag='BUTTON' text='Admin Access' /&gt;" WaitForReady="INTERACTIVE">
+                              <ui:Target.TimeoutMS>
+                                <InArgument x:TypeArguments="x:Int32">5000</InArgument>
+                              </ui:Target.TimeoutMS>
+                            </ui:Target>
+                          </ui:Click.Target>
+                        </ui:Click>
+
+                        <Delay DisplayName="Wait After Login" Duration="00:00:03" sap:VirtualizedContainerService.HintSize="884,88" sap2010:WorkflowViewState.IdRef="Delay_2" />
+
+                        <ui:LogMessage DisplayName="Log Login Success" sap:VirtualizedContainerService.HintSize="884,91" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Info" Message="[&quot;✅ Successfully logged in as Admin&quot;]" />
+                      </Sequence>
+                    </If.Then>
+                    <If.Else>
+                      <ui:LogMessage DisplayName="Log Already Logged In" sap:VirtualizedContainerService.HintSize="884,91" sap2010:WorkflowViewState.IdRef="LogMessage_5" Level="Info" Message="[&quot;ℹ️ Already logged in or no login required&quot;]" />
+                    </If.Else>
+                  </If>
+                </Sequence>
+              </TryCatch.Try>
+              <TryCatch.Catches>
+                <Catch x:TypeArguments="x:Exception" sap:VirtualizedContainerService.HintSize="1002,21" sap2010:WorkflowViewState.IdRef="Catch`1_1">
+                  <ActivityAction x:TypeArguments="x:Exception">
+                    <ActivityAction.Argument>
+                      <DelegateInArgument x:TypeArguments="x:Exception" Name="exception" />
+                    </ActivityAction.Argument>
+                    <ui:LogMessage DisplayName="Log Login Error" sap:VirtualizedContainerService.HintSize="960,91" sap2010:WorkflowViewState.IdRef="LogMessage_6" Level="Warn" Message="[&quot;⚠️ Login failed: &quot; + exception.Message]" />
+                  </ActivityAction>
+                </Catch>
+              </TryCatch.Catches>
+            </TryCatch>
+          </Sequence>
+        </ActivityAction>
+      </ui:OpenBrowser.Body>
+    </ui:OpenBrowser>
+
+    <!-- Final Log -->
+    <ui:LogMessage DisplayName="Log Workflow Complete" sap:VirtualizedContainerService.HintSize="1112,91" sap2010:WorkflowViewState.IdRef="LogMessage_7" Level="Info" Message="[&quot;🎉 Fraud Detection Chatbot Integration Workflow Completed Successfully!&quot;]" />
+  </Sequence>
+</Activity>

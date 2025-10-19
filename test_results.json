@@ -1,0 +1,21 @@
+{
+  "timestamp": "2025-10-17T13:22:12.059575",
+  "total_tests": 11,
+  "passed_tests": 5,
+  "failed_tests": 6,
+  "success_rate": 45.45454545454545,
+  "execution_time_seconds": 37.278146505355835,
+  "individual_results": {
+    "Data Generation": true,
+    "Data Processing": true,
+    "Feature Engineering": false,
+    "ADASYN Oversampling": false,
+    "ML Models": false,
+    "Model Evaluation": false,
+    "Model Explainability": false,
+    "Configuration Management": true,
+    "Logging System": false,
+    "API Structure (Phase 4)": true,
+    "End-to-End Integration": true
+  }
+}

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Activity mc:Ignorable="sap sap2010" x:Class="FraudDetectionChatbot" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="DashboardUrl" Type="InArgument(x:String)" />
+    <x:Property Name="ApiEndpoint" Type="InArgument(x:String)" />
+    <x:Property Name="AuthToken" Type="InArgument(x:String)" />
+  </x:Members>
+  <sap:VirtualizedContainerService.HintSize>1280,2064</sap:VirtualizedContainerService.HintSize>
+  <sap2010:WorkflowViewState.IdRef>FraudDetectionChatbot_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>UiPath.Web</x:String>
+      <x:String>UiPath.Web.Activities</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Web.Activities</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence DisplayName="Fraud Detection Chatbot Workflow" sap:VirtualizedContainerService.HintSize="1280,1999" sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="x:String" Name="ChatbotResponse" />
+      <Variable x:TypeArguments="x:String" Name="UserInput" />
+      <Variable x:TypeArguments="x:String" Name="ApiResponse" />
+      <Variable x:TypeArguments="x:Boolean" Name="IsSystemHealthy" />
+    </Sequence.Variables>
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    
+    <!-- Initialize Workflow -->
+    <ui:LogMessage DisplayName="Log Workflow Start" sap:VirtualizedContainerService.HintSize="1238,91" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="[&quot;🤖 Starting Fraud Detection Chatbot Workflow&quot;]" />
+    
+    <!-- Open Browser and Navigate to Dashboard -->
+    <ui:OpenBrowser AutomaticallyDownloadWebDriver="{x:Null}" CommunicationMethod="{x:Null}" Hidden="{x:Null}" NewSession="{x:Null}" Private="{x:Null}" UiBrowser="{x:Null}" BrowserType="Chrome" DisplayName="Open Fraud Detection Dashboard" sap:VirtualizedContainerService.HintSize="1238,51" sap2010:WorkflowViewState.IdRef="OpenBrowser_1" Url="[DashboardUrl]">
+      <ui:OpenBrowser.Body>
+        <ActivityAction x:TypeArguments="x:Object">
+          <ActivityAction.Argument>
+            <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
+          </ActivityAction.Argument>
+          <Sequence DisplayName="Browser Automation Sequence" sap:VirtualizedContainerService.HintSize="1206,1765" sap2010:WorkflowViewState.IdRef="Sequence_2">
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            
+            <!-- Wait for Page Load -->
+            <ui:DelayActivity DelayMS="3000" DisplayName="Wait for Dashboard Load" sap:VirtualizedContainerService.HintSize="1164,91" sap2010:WorkflowViewState.IdRef="DelayActivity_1" />
+            
+            <!-- Check System Health -->
+            <ui:HttpClient DisplayName="Check API Health" sap:VirtualizedContainerService.HintSize="1164,51" sap2010:WorkflowViewState.IdRef="HttpClient_1" Method="GET" ResponseHeaders="{x:Null}" Result="[ApiResponse]" Url="[ApiEndpoint + &quot;/health&quot;]">
+              <ui:HttpClient.Headers>
+                <scg:Dictionary x:TypeArguments="x:String, x:String">
+                  <x:String x:Key="Authorization">Bearer demo_token_123</x:String>
+                </scg:Dictionary>
+              </ui:HttpClient.Headers>
+            </ui:HttpClient>
+            
+            <!-- Parse Health Response -->
+            <ui:LogMessage DisplayName="Log API Health" sap:VirtualizedContainerService.HintSize="1164,91" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Info" Message="[&quot;API Health Response: &quot; + ApiResponse]" />
+            
+            <!-- Inject Chatbot Widget -->
+            <ui:InjectJsScript DisplayName="Inject Chatbot Widget" sap:VirtualizedContainerService.HintSize="1164,51" sap2010:WorkflowViewState.IdRef="InjectJsScript_1" JsScript="// Chatbot injection script&#xA;console.log('🤖 Injecting UiPath Fraud Detection Chatbot...');&#xA;&#xA;// Create chatbot container&#xA;const chatbotContainer = document.createElement('div');&#xA;chatbotContainer.id = 'uipath-fraud-chatbot';&#xA;chatbotContainer.innerHTML = `&#xA;  &lt;div class=&quot;uipath-chatbot-trigger&quot; onclick=&quot;toggleUiPathChatbot()&quot;&gt;&#xA;    &lt;svg width=&quot;24&quot; height=&quot;24&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;white&quot;&gt;&#xA;      &lt;path d=&quot;M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z&quot;/&gt;&#xA;    &lt;/svg&gt;&#xA;    &lt;span class=&quot;uipath-indicator&quot;&gt;UiPath&lt;/span&gt;&#xA;  &lt;/div&gt;&#xA;  &lt;div class=&quot;uipath-chatbot-window&quot; id=&quot;uipath-chat-window&quot; style=&quot;display: none;&quot;&gt;&#xA;    &lt;div class=&quot;uipath-chat-header&quot;&gt;&#xA;      &lt;h4&gt;🤖 UiPath Fraud Assistant&lt;/h4&gt;&#xA;      &lt;button onclick=&quot;toggleUiPathChatbot()&quot;&gt;×&lt;/button&gt;&#xA;    &lt;/div&gt;&#xA;    &lt;div class=&quot;uipath-chat-messages&quot; id=&quot;uipath-messages&quot;&gt;&#xA;      &lt;div class=&quot;uipath-bot-message&quot;&gt;&#xA;        Hi! I'm your UiPath-powered fraud detection assistant. I can help you analyze transactions and navigate the system.&#xA;      &lt;/div&gt;&#xA;    &lt;/div&gt;&#xA;    &lt;div class=&quot;uipath-chat-input&quot;&gt;&#xA;      &lt;input type=&quot;text&quot; id=&quot;uipath-input&quot; placeholder=&quot;Ask me about fraud detection...&quot; onkeypress=&quot;handleUiPathEnter(event)&quot;&gt;&#xA;      &lt;button onclick=&quot;sendUiPathMessage()&quot;&gt;Send&lt;/button&gt;&#xA;    &lt;/div&gt;&#xA;  &lt;/div&gt;&#xA;`;&#xA;&#xA;// Add styles&#xA;const chatbotStyles = document.createElement('style');&#xA;chatbotStyles.textContent = `&#xA;  .uipath-chatbot-trigger {&#xA;    position: fixed;&#xA;    bottom: 30px;&#xA;    right: 30px;&#xA;    width: 60px;&#xA;    height: 60px;&#xA;    background: linear-gradient(135deg, #ff6b35, #f7931e);&#xA;    border-radius: 50%;&#xA;    display: flex;&#xA;    align-items: center;&#xA;    justify-content: center;&#xA;    cursor: pointer;&#xA;    box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);&#xA;    z-index: 10000;&#xA;    transition: all 0.3s ease;&#xA;  }&#xA;  .uipath-chatbot-trigger:hover {&#xA;    transform: scale(1.1);&#xA;  }&#xA;  .uipath-indicator {&#xA;    position: absolute;&#xA;    top: -8px;&#xA;    right: -8px;&#xA;    background: #00d4ff;&#xA;    color: white;&#xA;    font-size: 0.7rem;&#xA;    padding: 2px 6px;&#xA;    border-radius: 10px;&#xA;    font-weight: 600;&#xA;  }&#xA;  .uipath-chatbot-window {&#xA;    position: fixed;&#xA;    bottom: 100px;&#xA;    right: 30px;&#xA;    width: 350px;&#xA;    height: 500px;&#xA;    background: white;&#xA;    border-radius: 12px;&#xA;    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);&#xA;    z-index: 10001;&#xA;    display: flex;&#xA;    flex-direction: column;&#xA;    border: 2px solid #ff6b35;&#xA;  }&#xA;  .uipath-chat-header {&#xA;    background: linear-gradient(135deg, #ff6b35, #f7931e);&#xA;    color: white;&#xA;    padding: 1rem;&#xA;    border-radius: 10px 10px 0 0;&#xA;    display: flex;&#xA;    justify-content: space-between;&#xA;    align-items: center;&#xA;  }&#xA;  .uipath-chat-messages {&#xA;    flex: 1;&#xA;    padding: 1rem;&#xA;    overflow-y: auto;&#xA;  }&#xA;  .uipath-bot-message {&#xA;    background: #f0f0f0;&#xA;    padding: 0.75rem;&#xA;    border-radius: 8px;&#xA;    margin-bottom: 0.5rem;&#xA;  }&#xA;  .uipath-user-message {&#xA;    background: #ff6b35;&#xA;    color: white;&#xA;    padding: 0.75rem;&#xA;    border-radius: 8px;&#xA;    margin-bottom: 0.5rem;&#xA;    margin-left: 2rem;&#xA;  }&#xA;  .uipath-chat-input {&#xA;    display: flex;&#xA;    padding: 1rem;&#xA;    border-top: 1px solid #eee;&#xA;  }&#xA;  .uipath-chat-input input {&#xA;    flex: 1;&#xA;    padding: 0.5rem;&#xA;    border: 1px solid #ddd;&#xA;    border-radius: 6px 0 0 6px;&#xA;  }&#xA;  .uipath-chat-input button {&#xA;    padding: 0.5rem 1rem;&#xA;    background: #ff6b35;&#xA;    color: white;&#xA;    border: none;&#xA;    border-radius: 0 6px 6px 0;&#xA;    cursor: pointer;&#xA;  }&#xA;`;&#xA;&#xA;// Add to page&#xA;document.head.appendChild(chatbotStyles);&#xA;document.body.appendChild(chatbotContainer);&#xA;&#xA;// Chatbot functions&#xA;window.toggleUiPathChatbot = function() {&#xA;  const window = document.getElementById('uipath-chat-window');&#xA;  window.style.display = window.style.display === 'none' ? 'flex' : 'none';&#xA;};&#xA;&#xA;window.handleUiPathEnter = function(event) {&#xA;  if (event.key === 'Enter') {&#xA;    sendUiPathMessage();&#xA;  }&#xA;};&#xA;&#xA;window.sendUiPathMessage = function() {&#xA;  const input = document.getElementById('uipath-input');&#xA;  const messages = document.getElementById('uipath-messages');&#xA;  const message = input.value.trim();&#xA;  &#xA;  if (message) {&#xA;    // Add user message&#xA;    const userMsg = document.createElement('div');&#xA;    userMsg.className = 'uipath-user-message';&#xA;    userMsg.textContent = message;&#xA;    messages.appendChild(userMsg);&#xA;    &#xA;    // Clear input&#xA;    input.value = '';&#xA;    &#xA;    // Send to UiPath integration server&#xA;    fetch('http://localhost:8001/uipath/conversation', {&#xA;      method: 'POST',&#xA;      headers: { 'Content-Type': 'application/json' },&#xA;      body: JSON.stringify({&#xA;        user_message: message,&#xA;        bot_response: 'Processing...',&#xA;        timestamp: new Date().toISOString(),&#xA;        session_id: 'uipath_fraud_chat'&#xA;      })&#xA;    });&#xA;    &#xA;    // Add bot response (simulate)&#xA;    setTimeout(() => {&#xA;      const botMsg = document.createElement('div');&#xA;      botMsg.className = 'uipath-bot-message';&#xA;      botMsg.textContent = generateUiPathResponse(message);&#xA;      messages.appendChild(botMsg);&#xA;      messages.scrollTop = messages.scrollHeight;&#xA;    }, 1000);&#xA;  }&#xA;};&#xA;&#xA;window.generateUiPathResponse = function(message) {&#xA;  const lowerMsg = message.toLowerCase();&#xA;  &#xA;  if (lowerMsg.includes('analyze') || lowerMsg.includes('fraud')) {&#xA;    return '🔍 I can help you analyze transactions for fraud. Please provide the transaction amount and merchant name.';&#xA;  } else if (lowerMsg.includes('status') || lowerMsg.includes('health')) {&#xA;    return '✅ System is healthy! All fraud detection models are loaded and operational.';&#xA;  } else if (lowerMsg.includes('upload') || lowerMsg.includes('file')) {&#xA;    return '📁 To upload transaction files, navigate to the Real-Time Monitoring page and use the drag &amp; drop area.';&#xA;  } else {&#xA;    return '🤖 I'm your UiPath-powered fraud assistant. I can help with transaction analysis, system status, and navigation. What would you like to know?';&#xA;  }&#xA;};&#xA;&#xA;console.log('✅ UiPath Fraud Detection Chatbot injected successfully!');" />
+            
+            <!-- Wait for User Interaction -->
+            <ui:DelayActivity DelayMS="5000" DisplayName="Wait for Chatbot Interaction" sap:VirtualizedContainerService.HintSize="1164,91" sap2010:WorkflowViewState.IdRef="DelayActivity_2" />
+            
+            <!-- Monitor Chatbot Activity -->
+            <ui:DoWhile DisplayName="Monitor Chatbot Activity" sap:VirtualizedContainerService.HintSize="1164,51" sap2010:WorkflowViewState.IdRef="DoWhile_1">
+              <ui:DoWhile.Body>
+                <Sequence DisplayName="Chatbot Monitoring Loop" sap:VirtualizedContainerService.HintSize="1122,765" sap2010:WorkflowViewState.IdRef="Sequence_3">
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                  
+                  <!-- Check for New Messages -->
+                  <ui:HttpClient DisplayName="Check Conversation History" sap:VirtualizedContainerService.HintSize="1080,51" sap2010:WorkflowViewState.IdRef="HttpClient_2" Method="GET" ResponseHeaders="{x:Null}" Result="[ChatbotResponse]" Url="http://localhost:8001/uipath/conversation/history?limit=1" />
+                  
+                  <!-- Process Response -->
+                  <ui:LogMessage DisplayName="Log Chatbot Activity" sap:VirtualizedContainerService.HintSize="1080,91" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Info" Message="[&quot;Chatbot Response: &quot; + ChatbotResponse]" />
+                  
+                  <!-- Wait Before Next Check -->
+                  <ui:DelayActivity DelayMS="5000" DisplayName="Wait 5 Seconds" sap:VirtualizedContainerService.HintSize="1080,91" sap2010:WorkflowViewState.IdRef="DelayActivity_3" />
+                  
+                  <!-- Check if Should Continue -->
+                  <ui:InvokeCode DisplayName="Check Continue Condition" sap:VirtualizedContainerService.HintSize="1080,51" sap2010:WorkflowViewState.IdRef="InvokeCode_1">
+                    <ui:InvokeCode.Code>
+                      ' Continue monitoring for 10 minutes (120 iterations * 5 seconds)
+                      Dim currentTime As DateTime = DateTime.Now
+                      Dim startTime As DateTime = DateTime.Now.AddMinutes(-10)
+                      IsSystemHealthy = currentTime > startTime
+                    </ui:InvokeCode.Code>
+                  </ui:InvokeCode>
+                </Sequence>
+              </ui:DoWhile.Body>
+              <ui:DoWhile.Condition>
+                <InArgument x:TypeArguments="x:Boolean">[IsSystemHealthy]</InArgument>
+              </ui:DoWhile.Condition>
+            </ui:DoWhile>
+            
+            <!-- Final Status Log -->
+            <ui:LogMessage DisplayName="Log Workflow Completion" sap:VirtualizedContainerService.HintSize="1164,91" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Info" Message="[&quot;🎉 UiPath Fraud Detection Chatbot Workflow Completed Successfully&quot;]" />
+          </Sequence>
+        </ActivityAction>
+      </ui:OpenBrowser.Body>
+    </ui:OpenBrowser>
+  </Sequence>
+</Activity>

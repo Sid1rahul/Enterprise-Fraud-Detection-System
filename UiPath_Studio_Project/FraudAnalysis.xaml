@@ -1,0 +1,231 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="FraudAnalysis" VisualBasic.Settings="{x:Null}" sap:VirtualizedContainerService.HintSize="1184,2156" sap2010:WorkflowViewState.IdRef="ActivityBuilder_1" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation/options" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=System.Private.CoreLib" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>GlobalVariablesNamespace</x:String>
+      <x:String>GlobalConstantsNamespace</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>System.Private.CoreLib</AssemblyReference>
+      <AssemblyReference>System.Activities.Core.Presentation</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic.Core</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.ValueTuple</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Drawing.Common</AssemblyReference>
+      <AssemblyReference>System.Drawing.Primitives</AssemblyReference>
+      <AssemblyReference>System.ObjectModel</AssemblyReference>
+      <AssemblyReference>System.Private.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Studio.Constants</AssemblyReference>
+      <AssemblyReference>System.Private.DataContractSerialization</AssemblyReference>
+      <AssemblyReference>UiPath.Excel.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.WebAPI.Activities</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence DisplayName="Fraud Analysis Workflow" sap:VirtualizedContainerService.HintSize="1154,2091" sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="x:String" Name="csvFilePath" />
+      <Variable x:TypeArguments="x:String" Name="apiResponse" />
+      <Variable x:TypeArguments="x:String" Name="fraudResults" />
+      <Variable x:TypeArguments="x:Boolean" Name="fileUploaded" />
+    </Sequence.Variables>
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+
+    <ui:LogMessage DisplayName="Log Fraud Analysis Start" sap:VirtualizedContainerService.HintSize="1112,91" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="[&quot;🔍 Starting Fraud Analysis Workflow&quot;]" />
+
+    <!-- Set CSV File Path -->
+    <Assign DisplayName="Set CSV File Path" sap:VirtualizedContainerService.HintSize="1112,82" sap2010:WorkflowViewState.IdRef="Assign_1">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:String">[csvFilePath]</OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:String">"C:\CFD\datasets\ecommerce_transactions_5k.csv"</InArgument>
+      </Assign.Value>
+    </Assign>
+
+    <!-- Navigate to Batch Processing Page -->
+    <TryCatch DisplayName="Fraud Analysis Process" sap:VirtualizedContainerService.HintSize="1112,1826" sap2010:WorkflowViewState.IdRef="TryCatch_1">
+      <TryCatch.Try>
+        <Sequence DisplayName="Batch Processing Sequence" sap:VirtualizedContainerService.HintSize="1078,1734" sap2010:WorkflowViewState.IdRef="Sequence_2">
+          <sap:WorkflowViewStateService.ViewState>
+            <scg:Dictionary x:TypeArguments="x:String, x:Object">
+              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            </scg:Dictionary>
+          </sap:WorkflowViewStateService.ViewState>
+
+          <!-- Navigate to Fraud Analysis Page -->
+          <ui:Click DelayBefore="{x:Null}" DelayAfter="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click Fraud Analysis Menu" sap:VirtualizedContainerService.HintSize="1036,107" sap2010:WorkflowViewState.IdRef="Click_1" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
+            <ui:Click.Target>
+              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="f6a7b8c9-0d1e-2f3a-4b5c-6d7e8f9a0b1c" InformativeScreenshot="8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a.png" Selector="&lt;webctrl tag='A' text='Fraud Analysis' /&gt;" WaitForReady="INTERACTIVE">
+                <ui:Target.TimeoutMS>
+                  <InArgument x:TypeArguments="x:Int32">5000</InArgument>
+                </ui:Target.TimeoutMS>
+              </ui:Target>
+            </ui:Click.Target>
+          </ui:Click>
+
+          <Delay DisplayName="Wait for Page Load" Duration="00:00:03" sap:VirtualizedContainerService.HintSize="1036,88" sap2010:WorkflowViewState.IdRef="Delay_1" />
+
+          <!-- Upload CSV File -->
+          <ui:LogMessage DisplayName="Log File Upload" sap:VirtualizedContainerService.HintSize="1036,91" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Info" Message="[&quot;📁 Uploading transaction file: &quot; + csvFilePath]" />
+
+          <!-- Click Upload Button -->
+          <ui:Click DelayBefore="{x:Null}" DelayAfter="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click Upload Button" sap:VirtualizedContainerService.HintSize="1036,107" sap2010:WorkflowViewState.IdRef="Click_2" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
+            <ui:Click.Target>
+              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="a7b8c9d0-1e2f-3a4b-5c6d-7e8f9a0b1c2d" InformativeScreenshot="9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b.png" Selector="&lt;webctrl tag='INPUT' type='file' /&gt;" WaitForReady="INTERACTIVE">
+                <ui:Target.TimeoutMS>
+                  <InArgument x:TypeArguments="x:Int32">5000</InArgument>
+                </ui:Target.TimeoutMS>
+              </ui:Target>
+            </ui:Click.Target>
+          </ui:Click>
+
+          <Delay DisplayName="Wait for File Dialog" Duration="00:00:02" sap:VirtualizedContainerService.HintSize="1036,88" sap2010:WorkflowViewState.IdRef="Delay_2" />
+
+          <!-- Type File Path in Dialog -->
+          <ui:TypeInto DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" DelayAfter="{x:Null}" Activate="True" ClickBeforeTyping="True" DisplayName="Enter File Path" EmptyField="True" sap:VirtualizedContainerService.HintSize="1036,134" sap2010:WorkflowViewState.IdRef="TypeInto_1" SendWindowMessages="False" SimulateType="True" Text="[csvFilePath]">
+            <ui:TypeInto.Target>
+              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="b8c9d0e1-2f3a-4b5c-6d7e-8f9a0b1c2d3e" InformativeScreenshot="0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c.png" Selector="&lt;wnd app='explorer.exe' cls='#32770' title='Open' /&gt;&lt;wnd cls='DUIViewWndClassName' /&gt;&lt;wnd cls='DirectUIHWND' /&gt;&lt;wnd cls='FloatNotifySink' /&gt;&lt;wnd cls='ComboBox' /&gt;&lt;wnd cls='Edit' /&gt;" WaitForReady="INTERACTIVE">
+                <ui:Target.TimeoutMS>
+                  <InArgument x:TypeArguments="x:Int32">5000</InArgument>
+                </ui:Target.TimeoutMS>
+              </ui:Target>
+            </ui:TypeInto.Target>
+          </ui:TypeInto>
+
+          <!-- Press Enter to Select File -->
+          <ui:SendHotkey DelayBefore="{x:Null}" DelayAfter="{x:Null}" Activate="True" ClickBeforeTyping="False" DisplayName="Press Enter" sap:VirtualizedContainerService.HintSize="1036,107" sap2010:WorkflowViewState.IdRef="SendHotkey_1" Key="enter" KeyModifiers="None" SendWindowMessages="False" SpecialKey="True">
+            <ui:SendHotkey.Target>
+              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="c9d0e1f2-3a4b-5c6d-7e8f-9a0b1c2d3e4f" InformativeScreenshot="1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d.png" Selector="&lt;wnd app='explorer.exe' cls='#32770' title='Open' /&gt;" WaitForReady="INTERACTIVE">
+                <ui:Target.TimeoutMS>
+                  <InArgument x:TypeArguments="x:Int32">3000</InArgument>
+                </ui:Target.TimeoutMS>
+              </ui:Target>
+            </ui:SendHotkey.Target>
+          </ui:SendHotkey>
+
+          <Delay DisplayName="Wait for File Upload" Duration="00:00:03" sap:VirtualizedContainerService.HintSize="1036,88" sap2010:WorkflowViewState.IdRef="Delay_3" />
+
+          <!-- Start Processing -->
+          <ui:Click DelayBefore="{x:Null}" DelayAfter="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click Process Button" sap:VirtualizedContainerService.HintSize="1036,107" sap2010:WorkflowViewState.IdRef="Click_3" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
+            <ui:Click.Target>
+              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="d0e1f2a3-4b5c-6d7e-8f9a-0b1c2d3e4f5a" InformativeScreenshot="2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e.png" Selector="&lt;webctrl tag='BUTTON' text='Process Transactions' /&gt;" WaitForReady="INTERACTIVE">
+                <ui:Target.TimeoutMS>
+                  <InArgument x:TypeArguments="x:Int32">5000</InArgument>
+                </ui:Target.TimeoutMS>
+              </ui:Target>
+            </ui:Click.Target>
+          </ui:Click>
+
+          <ui:LogMessage DisplayName="Log Processing Started" sap:VirtualizedContainerService.HintSize="1036,91" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Info" Message="[&quot;⚙️ Fraud analysis processing started...&quot;]" />
+
+          <!-- Wait for Processing to Complete -->
+          <Delay DisplayName="Wait for Processing" Duration="00:00:10" sap:VirtualizedContainerService.HintSize="1036,88" sap2010:WorkflowViewState.IdRef="Delay_4" />
+
+          <!-- Check for Results -->
+          <ui:ElementExists DisplayName="Check Results Available" Exists="[fileUploaded]" sap:VirtualizedContainerService.HintSize="1036,107" sap2010:WorkflowViewState.IdRef="ElementExists_1">
+            <ui:ElementExists.Target>
+              <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="e1f2a3b4-5c6d-7e8f-9a0b-1c2d3e4f5a6b" InformativeScreenshot="3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f.png" Selector="&lt;webctrl tag='DIV' class='results-container' /&gt;" WaitForReady="INTERACTIVE">
+                <ui:Target.TimeoutMS>
+                  <InArgument x:TypeArguments="x:Int32">5000</InArgument>
+                </ui:Target.TimeoutMS>
+              </ui:Target>
+            </ui:ElementExists.Target>
+          </ui:ElementExists>
+
+          <!-- Take Screenshot of Results -->
+          <If Condition="[fileUploaded]" DisplayName="If Results Available" sap:VirtualizedContainerService.HintSize="1036,584" sap2010:WorkflowViewState.IdRef="If_1">
+            <If.Then>
+              <Sequence DisplayName="Capture Results" sap:VirtualizedContainerService.HintSize="1002,492" sap2010:WorkflowViewState.IdRef="Sequence_3">
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+
+                <ui:LogMessage DisplayName="Log Results Found" sap:VirtualizedContainerService.HintSize="960,91" sap2010:WorkflowViewState.IdRef="LogMessage_4" Level="Info" Message="[&quot;📊 Fraud analysis results available&quot;]" />
+
+                <ui:TakeScreenshot DisplayName="Capture Results Screenshot" sap:VirtualizedContainerService.HintSize="960,107" sap2010:WorkflowViewState.IdRef="TakeScreenshot_1" FilePath="[&quot;C:\CFD\UiPath_Screenshots\fraud_results_&quot; + DateTime.Now.ToString(&quot;yyyyMMdd_HHmmss&quot;) + &quot;.png&quot;]">
+                  <ui:TakeScreenshot.Target>
+                    <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="f2a3b4c5-6d7e-8f9a-0b1c-2d3e4f5a6b7c" InformativeScreenshot="4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a.png" Selector="&lt;webctrl tag='DIV' class='results-container' /&gt;" WaitForReady="INTERACTIVE">
+                      <ui:Target.TimeoutMS>
+                        <InArgument x:TypeArguments="x:Int32">3000</InArgument>
+                      </ui:Target.TimeoutMS>
+                    </ui:Target>
+                  </ui:TakeScreenshot.Target>
+                </ui:TakeScreenshot>
+
+                <!-- Export Results -->
+                <ui:Click DelayBefore="{x:Null}" DelayAfter="{x:Null}" ClickType="CLICK_SINGLE" DisplayName="Click Export Button" sap:VirtualizedContainerService.HintSize="960,107" sap2010:WorkflowViewState.IdRef="Click_4" KeyModifiers="None" MouseButton="BTN_LEFT" SendWindowMessages="False" SimulateClick="True">
+                  <ui:Click.Target>
+                    <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" Id="a3b4c5d6-7e8f-9a0b-1c2d-3e4f5a6b7c8d" InformativeScreenshot="5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b.png" Selector="&lt;webctrl tag='BUTTON' text='Export Results' /&gt;" WaitForReady="INTERACTIVE">
+                      <ui:Target.TimeoutMS>
+                        <InArgument x:TypeArguments="x:Int32">5000</InArgument>
+                      </ui:Target.TimeoutMS>
+                    </ui:Target>
+                  </ui:Click.Target>
+                </ui:Click>
+
+                <ui:LogMessage DisplayName="Log Export Complete" sap:VirtualizedContainerService.HintSize="960,91" sap2010:WorkflowViewState.IdRef="LogMessage_5" Level="Info" Message="[&quot;💾 Results exported successfully&quot;]" />
+              </Sequence>
+            </If.Then>
+            <If.Else>
+              <ui:LogMessage DisplayName="Log No Results" sap:VirtualizedContainerService.HintSize="960,91" sap2010:WorkflowViewState.IdRef="LogMessage_6" Level="Warn" Message="[&quot;⚠️ No results found or processing still in progress&quot;]" />
+            </If.Else>
+          </If>
+        </Sequence>
+      </TryCatch.Try>
+      <TryCatch.Catches>
+        <Catch x:TypeArguments="x:Exception" sap:VirtualizedContainerService.HintSize="1078,21" sap2010:WorkflowViewState.IdRef="Catch`1_1">
+          <ActivityAction x:TypeArguments="x:Exception">
+            <ActivityAction.Argument>
+              <DelegateInArgument x:TypeArguments="x:Exception" Name="exception" />
+            </ActivityAction.Argument>
+            <ui:LogMessage DisplayName="Log Analysis Error" sap:VirtualizedContainerService.HintSize="1036,91" sap2010:WorkflowViewState.IdRef="LogMessage_7" Level="Error" Message="[&quot;❌ Fraud analysis failed: &quot; + exception.Message]" />
+          </ActivityAction>
+        </Catch>
+      </TryCatch.Catches>
+    </TryCatch>
+
+    <ui:LogMessage DisplayName="Log Workflow Complete" sap:VirtualizedContainerService.HintSize="1112,91" sap2010:WorkflowViewState.IdRef="LogMessage_8" Level="Info" Message="[&quot;✅ Fraud Analysis Workflow Completed&quot;]" />
+  </Sequence>
+</Activity>

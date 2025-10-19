@@ -1,0 +1,103 @@
+[
+  {
+    "test": "Health Check",
+    "status": "PASS",
+    "timestamp": "2025-10-17T13:40:04.293190",
+    "response": {
+      "status": "healthy",
+      "timestamp": "2025-10-17T13:40:04.289120",
+      "models_loaded": []
+    },
+    "error": null
+  },
+  {
+    "test": "API Info",
+    "status": "PASS",
+    "timestamp": "2025-10-17T13:40:06.847356",
+    "response": {
+      "message": "Credit Card Fraud Detection API",
+      "version": "1.0.0"
+    },
+    "error": null
+  },
+  {
+    "test": "Normal Transaction",
+    "status": "FAIL",
+    "timestamp": "2025-10-17T13:40:09.461393",
+    "response": null,
+    "error": "Status: 500"
+  },
+  {
+    "test": "Suspicious Transaction",
+    "status": "FAIL",
+    "timestamp": "2025-10-17T13:40:12.059778",
+    "response": null,
+    "error": "Status: 500"
+  },
+  {
+    "test": "Batch Prediction",
+    "status": "PASS",
+    "timestamp": "2025-10-17T13:40:14.644014",
+    "response": {
+      "predictions": [
+        {
+          "case_id": "ERROR_1",
+          "fraud_probability": 0.0,
+          "risk_level": "unknown",
+          "prediction": "error",
+          "confidence": 0.0,
+          "explanation": {
+            "error": ""
+          },
+          "processing_time_ms": 0.0,
+          "model_used": "xgboost",
+          "timestamp": "2025-10-17T13:40:14.624945"
+        },
+        {
+          "case_id": "ERROR_2",
+          "fraud_probability": 0.0,
+          "risk_level": "unknown",
+          "prediction": "error",
+          "confidence": 0.0,
+          "explanation": {
+            "error": ""
+          },
+          "processing_time_ms": 0.0,
+          "model_used": "xgboost",
+          "timestamp": "2025-10-17T13:40:14.627772"
+        }
+      ],
+      "total_processed": 2,
+      "processing_time_ms": 2.83,
+      "success_count": 0,
+      "error_count": 2
+    },
+    "error": null
+  },
+  {
+    "test": "Model Status",
+    "status": "PASS",
+    "timestamp": "2025-10-17T13:40:17.223628",
+    "response": [],
+    "error": null
+  },
+  {
+    "test": "Model Reload",
+    "status": "PASS",
+    "timestamp": "2025-10-17T13:40:19.805165",
+    "response": {
+      "message": "Models reloaded successfully",
+      "models": []
+    },
+    "error": null
+  },
+  {
+    "test": "Authentication Error",
+    "status": "PASS",
+    "timestamp": "2025-10-17T13:40:22.392097",
+    "response": {
+      "expected_401": true
+    },
+    "error": null
+  }
+]

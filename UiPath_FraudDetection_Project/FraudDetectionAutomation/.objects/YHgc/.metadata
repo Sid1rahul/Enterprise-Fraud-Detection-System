@@ -1,0 +1,12 @@
+﻿{
+  "Name": "Edge Fraud Detection System",
+  "Type": "App",
+  "Id": "YHgc02l4qUC2dc2GPqyWYw",
+  "Reference": "2l4W1lvR7EKbTHgwBcIsiA/YHgc02l4qUC2dc2GPqyWYw",
+  "Created": "2025-10-18T06:43:37.8121332Z",
+  "Updated": "2025-10-18T06:43:37.8121332Z",
+  "CreatedBy": [
+    "UiPath.UIAutomationCore, Version=25.10.16.0, Culture=neutral, PublicKeyToken=null",
+    "UiPath.Platform, Version=25.10.1.0, Culture=neutral, PublicKeyToken=null"
+  ]
+}

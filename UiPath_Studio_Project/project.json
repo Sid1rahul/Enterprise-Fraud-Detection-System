@@ -1,0 +1,36 @@
+{
+  "name": "FraudDetectionChatbot",
+  "description": "Credit Card Fraud Detection System with Intelligent Chatbot Integration",
+  "main": "Main.xaml",
+  "dependencies": {
+    "UiPath.System.Activities": "[22.10.4]",
+    "UiPath.UIAutomation.Activities": "[22.10.4]"
+  },
+  "webApiDependencies": {},
+  "projectVersion": "1.0.0",
+  "runtimeOptions": {
+    "autoDispose": false,
+    "isPausable": true,
+    "requiresUserInteraction": true,
+    "supportsPersistence": false,
+    "excludedLoggedData": [
+      "Private:*",
+      "*password*"
+    ]
+  },
+  "designOptions": {
+    "projectProfile": "Developement",
+    "outputType": "Process"
+  },
+  "expressionLanguage": "VisualBasic",
+  "entryPoints": [
+    {
+      "filePath": "Main.xaml",
+      "uniqueId": "d9c9b4b5-7b1e-4c5a-9f3e-2d8a7c6b5e4f",
+      "input": [],
+      "output": []
+    }
+  ],
+  "isTemplate": false,
+  "targetFramework": "Windows"
+}
