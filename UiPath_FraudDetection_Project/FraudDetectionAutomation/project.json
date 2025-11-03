@@ -1,7 +1,7 @@
 {
   "name": "FraudDetectionAutomation",
   "projectId": "2e827c47-17ea-4aa9-b3d6-f422ef23f3d5",
-  "description": "",
+  "description": "Automated fraud detection system interaction with chatbot integration",
   "main": "Main.xaml",
   "dependencies": {
     "UiPath.Excel.Activities": "[3.2.1]",

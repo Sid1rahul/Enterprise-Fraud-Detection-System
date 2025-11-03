@@ -1,4 +1,4 @@
-<Activity mc:Ignorable="sap sap2010" x:Class="Main" VisualBasic.Settings="{x:Null}" sap2010:WorkflowViewState.IdRef="ActivityBuilder_1" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:s="clr-namespace:System;assembly=System.Private.CoreLib" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=System.Private.CoreLib" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:uix="http://schemas.uipath.com/workflow/activities/uix" xmlns:uwah="clr-namespace:UiPath.Web.Activities.Http;assembly=UiPath.Web.Activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+<Activity mc:Ignorable="sap sap2010" x:Class="Main" VisualBasic.Settings="{x:Null}" sap2010:WorkflowViewState.IdRef="ActivityBuilder_1" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:moiw="clr-namespace:Microsoft.Office.Interop.Word;assembly=Microsoft.Office.Interop.Word" xmlns:s="clr-namespace:System;assembly=System.Private.CoreLib" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=System.Private.CoreLib" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:uix="http://schemas.uipath.com/workflow/activities/uix" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <TextExpression.NamespacesForImplementation>
     <sco:Collection x:TypeArguments="x:String">
       <x:String>System.Activities</x:String>
@@ -113,6 +113,8 @@
       <x:String>UiPath.Sdk.Activities</x:String>
       <x:String>UiPath.Sdk.Activities.DependencyInjection.Contracts</x:String>
       <x:String>UiPath.Sdk.Activities.DependencyInjection</x:String>
+      <x:String>UiPath.UIAutomationNext.Activities.Models</x:String>
+      <x:String>Microsoft.Office.Interop.Word</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -238,20 +240,19 @@
       <AssemblyReference>UiPath.OCR.Activities</AssemblyReference>
       <AssemblyReference>UiPath.Platform</AssemblyReference>
       <AssemblyReference>UiPath.Web.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.Office.Interop.Word</AssemblyReference>
+      <AssemblyReference>UiPath.Mail</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence sap2010:Annotation.AnnotationText="" DisplayName="Main Sequence" sap:VirtualizedContainerService.HintSize="450,580" sap2010:WorkflowViewState.IdRef="Sequence_1">
+  <Sequence sap2010:Annotation.AnnotationText="" DisplayName="Main Sequence" sap:VirtualizedContainerService.HintSize="754,1313.3333333333333" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
-      <Variable x:TypeArguments="x:Boolean" Default="True" Name="IsSystemHealthy" />
-      <Variable x:TypeArguments="x:String" Name="ChatbotResponse" />
-      <Variable x:TypeArguments="x:String" Default="demo_token_123" Name="AuthToken" />
-      <Variable x:TypeArguments="x:String" Name="ApiEndpoint">
+      <Variable x:TypeArguments="moiw:Browser" Name="Browser" />
+      <Variable x:TypeArguments="x:String" Name="ResponseText" />
+      <Variable x:TypeArguments="s:String[]" Name="Commands">
         <Variable.Default>
-          <Literal x:TypeArguments="x:String">http://localhost:5000</Literal>
+          <VisualBasicValue x:TypeArguments="s:String[]" ExpressionText="{}{&quot;Check system health&quot;,&quot;Analyze a transaction&quot;,&quot;Show fraud statistics&quot;,&quot;Upload transaction file&quot;}" />
         </Variable.Default>
       </Variable>
-      <Variable x:TypeArguments="x:String" Default="http://localhost:3000/dashboard" Name="DashboardUrl" />
-      <Variable x:TypeArguments="x:String" Name="screenshot" />
     </Sequence.Variables>
     <sap:WorkflowViewStateService.ViewState>
       <scg:Dictionary x:TypeArguments="x:String, x:Object">
@@ -259,160 +260,65 @@
         <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
       </scg:Dictionary>
     </sap:WorkflowViewStateService.ViewState>
-    <Sequence DisplayName="Initialize and Open Browser" sap:VirtualizedContainerService.HintSize="450,57.333333333333336" sap2010:WorkflowViewState.IdRef="Sequence_2">
-      <sap:WorkflowViewStateService.ViewState>
-        <scg:Dictionary x:TypeArguments="x:String, x:Object">
-          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
-          <x:Boolean x:Key="IsPinned">False</x:Boolean>
-        </scg:Dictionary>
-      </sap:WorkflowViewStateService.ViewState>
-      <ui:OpenBrowser AutomaticallyDownloadWebDriver="{x:Null}" CommunicationMethod="{x:Null}" Hidden="{x:Null}" NewSession="{x:Null}" Private="{x:Null}" UiBrowser="{x:Null}" BrowserType="Edge" DisplayName="Open Browser" sap:VirtualizedContainerService.HintSize="484,175.33333333333334" sap2010:WorkflowViewState.IdRef="OpenBrowser_2" Url="[DashboardUrl]">
-        <ui:OpenBrowser.Body>
-          <ActivityAction x:TypeArguments="x:Object">
-            <ActivityAction.Argument>
-              <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
-            </ActivityAction.Argument>
-            <Sequence DisplayName="Do" sap:VirtualizedContainerService.HintSize="450,25.333333333333332" sap2010:WorkflowViewState.IdRef="Sequence_3">
-              <sap:WorkflowViewStateService.ViewState>
-                <scg:Dictionary x:TypeArguments="x:String, x:Object">
-                  <x:Boolean x:Key="IsExpanded">False</x:Boolean>
-                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
-                </scg:Dictionary>
-              </sap:WorkflowViewStateService.ViewState>
-              <Delay Duration="00:00:03" sap:VirtualizedContainerService.HintSize="416,48" sap2010:WorkflowViewState.IdRef="Delay_1">
-                <sap:WorkflowViewStateService.ViewState>
-                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
-                    <x:Boolean x:Key="IsExpanded">False</x:Boolean>
-                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
-                  </scg:Dictionary>
-                </sap:WorkflowViewStateService.ViewState>
-              </Delay>
-            </Sequence>
-          </ActivityAction>
-        </ui:OpenBrowser.Body>
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-            <x:Boolean x:Key="IsPinned">False</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </ui:OpenBrowser>
-    </Sequence>
-    <Sequence DisplayName="Check API Health" sap:VirtualizedContainerService.HintSize="450,364" sap2010:WorkflowViewState.IdRef="Sequence_4">
-      <sap:WorkflowViewStateService.ViewState>
-        <scg:Dictionary x:TypeArguments="x:String, x:Object">
-          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-          <x:Boolean x:Key="IsPinned">False</x:Boolean>
-        </scg:Dictionary>
-      </sap:WorkflowViewStateService.ViewState>
-      <uwah:NetHttpRequest BasicAuthPassword="{x:Null}" BasicAuthSecurePassword="{x:Null}" BasicAuthUsername="{x:Null}" BinaryPayload="{x:Null}" ClientCertPassword="{x:Null}" ClientCertPath="{x:Null}" ClientCertSecurePassword="{x:Null}" Cookies="{x:Null}" CustomNegotiatedAuthCredentials="{x:Null}" FilePath="{x:Null}" FormData="{x:Null}" LocalFiles="{x:Null}" OAuthToken="{x:Null}" OutputFileName="{x:Null}" OutputFileTargetFolder="{x:Null}" Parameters="{x:Null}" PathResource="{x:Null}" ProxyConfiguration="{x:Null}" ResourceFiles="{x:Null}" TextPayload="{x:Null}" AuthenticationType="None" ContinueOnError="True" DisableSslVerification="False" DisplayName="HTTP Request" EnableCookies="True" FileOverwrite="AutoRename" FollowRedirects="True" FormDataParts="[New List (Of FormDataPart) From _&#xA;{&#xA;&#x9;New FileFormDataPart(),&#xA;&#x9;New BinaryFormDataPart(),&#xA;&#x9;New TextFormDataPart()&#xA;}]" Headers="[new System.Collections.Generic.Dictionary(Of System.String, System.String) From { { &quot;Authorization&quot;, &quot;Bearer &quot; + AuthToken } }]" sap:VirtualizedContainerService.HintSize="416,272" sap2010:WorkflowViewState.IdRef="NetHttpRequest_1" InitialDelay="500" MaxRedirects="3" MaxRetryAfterDelay="60000" Method="GET" Multiplier="2" PreferRetryAfterValue="True" RequestBodyType="None" RequestUrl="[ApiEndpoint + &quot;/health&quot;]" RetryCount="3" RetryPolicyType="Basic" RetryStatusCodes="[New List (Of System.Net.HttpStatusCode) From _&#xA;{&#xA;&#x9;System.Net.HttpStatusCode.RequestTimeout,&#xA;&#x9;System.Net.HttpStatusCode.TooManyRequests,&#xA;&#x9;System.Net.HttpStatusCode.InternalServerError,&#xA;&#x9;System.Net.HttpStatusCode.BadGateway,&#xA;&#x9;System.Net.HttpStatusCode.ServiceUnavailable,&#xA;&#x9;System.Net.HttpStatusCode.GatewayTimeout&#xA;}]" SaveRawRequestResponse="False" SaveResponseAsFile="False" TextPayloadContentType="application/json" TextPayloadEncoding="UTF-8" TlsProtocol="Automatic" UseJitter="True" UseOsNegotiatedAuthCredentials="True">
-        <uwah:NetHttpRequest.TimeoutInMiliseconds>
-          <InArgument x:TypeArguments="s:Nullable(x:Int32)">
-            <Literal x:TypeArguments="s:Nullable(x:Int32)" Value="30000" />
-          </InArgument>
-        </uwah:NetHttpRequest.TimeoutInMiliseconds>
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-            <x:Boolean x:Key="IsPinned">False</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </uwah:NetHttpRequest>
-    </Sequence>
-    <Sequence DisplayName="Inject Chatbot" sap:VirtualizedContainerService.HintSize="518,327.3333333333333" sap2010:WorkflowViewState.IdRef="Sequence_5">
-      <sap:WorkflowViewStateService.ViewState>
-        <scg:Dictionary x:TypeArguments="x:String, x:Object">
-          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
-          <x:Boolean x:Key="IsPinned">False</x:Boolean>
-        </scg:Dictionary>
-      </sap:WorkflowViewStateService.ViewState>
-      <uix:NApplicationCard AttachMode="ByInstance" DisplayName="Edge Fraud Detection System" HealingAgentBehavior="Job" sap:VirtualizedContainerService.HintSize="484,267.3333333333333" sap2010:WorkflowViewState.IdRef="NApplicationCard_3" InteractionMode="DebuggerApi" ScopeGuid="607f2055-a927-4863-a6d5-b4ab77d1f15a" Version="V2">
-        <uix:NApplicationCard.Body>
-          <ActivityAction x:TypeArguments="x:Object">
-            <ActivityAction.Argument>
-              <DelegateInArgument x:TypeArguments="x:Object" Name="WSSessionData" />
-            </ActivityAction.Argument>
-            <Sequence DisplayName="Do" sap:VirtualizedContainerService.HintSize="450,246.66666666666663" sap2010:WorkflowViewState.IdRef="Sequence_9">
-              <sap:WorkflowViewStateService.ViewState>
-                <scg:Dictionary x:TypeArguments="x:String, x:Object">
-                  <x:Boolean x:Key="IsExpanded">False</x:Boolean>
-                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
-                </scg:Dictionary>
-              </sap:WorkflowViewStateService.ViewState>
-              <uix:NInjectJsScript InputParameter="{x:Null}" ScriptOutput="{x:Null}" DisplayName="Inject Js Script" sap:VirtualizedContainerService.HintSize="416,186.66666666666666" sap2010:WorkflowViewState.IdRef="NInjectJsScript_3" ScopeIdentifier="607f2055-a927-4863-a6d5-b4ab77d1f15a" ScriptCode="[&quot;&quot;&quot;&#xA;// UiPath Chatbot Injection&#xA;console.log('🤖 UiPath Studio: Injecting Fraud Detection Chatbot...');&#xA;&#xA;// full chatbot code here&#xA;&#xA;console.log('✅ UiPath Fraud Detection Chatbot injected successfully!');&#xA;&quot;&quot;&quot;]" Version="V5" />
-            </Sequence>
-          </ActivityAction>
-        </uix:NApplicationCard.Body>
-        <uix:NApplicationCard.TargetApp>
-          <uix:TargetApp Area="-11, -11, 1942, 1030" BrowserType="Edge" ContentHash="vsk808aVyUeNMsqcSD4zag" IconBase64="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" InformativeScreenshot="6aee076f006c7ce14819e887c6abcd2e.jpg" Reference="2l4W1lvR7EKbTHgwBcIsiA/BykFsRDHAki74lqDDmZ-3w" Selector="&lt;html app='msedge.exe' title='Fraud Detection System' /&gt;" Url="http://localhost:3000/" Version="V2" />
-        </uix:NApplicationCard.TargetApp>
-      </uix:NApplicationCard>
-    </Sequence>
-    <Sequence DisplayName="Monitor Activity" sap:VirtualizedContainerService.HintSize="450,48" sap2010:WorkflowViewState.IdRef="Sequence_7">
-      <Sequence.Variables>
-        <Variable x:TypeArguments="x:String" Name="Out" />
-      </Sequence.Variables>
-      <sap:WorkflowViewStateService.ViewState>
-        <scg:Dictionary x:TypeArguments="x:String, x:Object">
-          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
-          <x:Boolean x:Key="IsPinned">False</x:Boolean>
-        </scg:Dictionary>
-      </sap:WorkflowViewStateService.ViewState>
-      <ui:InterruptibleWhile CurrentIndex="{x:Null}" Condition="[IsSystemHealthy]" DisplayName="While" sap:VirtualizedContainerService.HintSize="452,522" sap2010:WorkflowViewState.IdRef="InterruptibleWhile_1">
-        <ui:InterruptibleWhile.Body>
-          <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="450,399.3333333333333" sap2010:WorkflowViewState.IdRef="Sequence_8">
+    <uix:NApplicationCard AttachMode="ByInstance" DisplayName="Edge Fraud Detection System(3)" HealingAgentBehavior="Job" sap:VirtualizedContainerService.HintSize="520,1260" sap2010:WorkflowViewState.IdRef="NApplicationCard_12" InteractionMode="DebuggerApi" ScopeGuid="4523e48f-0db4-4612-b2b0-35a72f3a37ec" Version="V2">
+      <uix:NApplicationCard.Body>
+        <ActivityAction x:TypeArguments="x:Object">
+          <ActivityAction.Argument>
+            <DelegateInArgument x:TypeArguments="x:Object" Name="WSSessionData" />
+          </ActivityAction.Argument>
+          <Sequence DisplayName="Do" sap:VirtualizedContainerService.HintSize="486,978" sap2010:WorkflowViewState.IdRef="Sequence_18">
+            <Sequence.Variables>
+              <Variable x:TypeArguments="x:String" Name="botResponse" />
+            </Sequence.Variables>
             <sap:WorkflowViewStateService.ViewState>
               <scg:Dictionary x:TypeArguments="x:String, x:Object">
                 <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-                <x:Boolean x:Key="IsPinned">False</x:Boolean>
               </scg:Dictionary>
             </sap:WorkflowViewStateService.ViewState>
-            <Delay Duration="00:00:05" sap:VirtualizedContainerService.HintSize="416,57.333333333333336" sap2010:WorkflowViewState.IdRef="Delay_2">
-              <sap:WorkflowViewStateService.ViewState>
-                <scg:Dictionary x:TypeArguments="x:String, x:Object">
-                  <x:Boolean x:Key="IsExpanded">False</x:Boolean>
-                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
-                </scg:Dictionary>
-              </sap:WorkflowViewStateService.ViewState>
-            </Delay>
-            <uwah:NetHttpRequest BasicAuthPassword="{x:Null}" BasicAuthSecurePassword="{x:Null}" BasicAuthUsername="{x:Null}" BinaryPayload="{x:Null}" ClientCertPassword="{x:Null}" ClientCertPath="{x:Null}" ClientCertSecurePassword="{x:Null}" Cookies="{x:Null}" CustomNegotiatedAuthCredentials="{x:Null}" FilePath="{x:Null}" FormData="{x:Null}" LocalFiles="{x:Null}" OAuthToken="{x:Null}" OutputFileName="{x:Null}" OutputFileTargetFolder="{x:Null}" Parameters="{x:Null}" PathResource="{x:Null}" ProxyConfiguration="{x:Null}" ResourceFiles="{x:Null}" TextPayload="{x:Null}" AuthenticationType="None" ContinueOnError="True" DisableSslVerification="False" DisplayName="HTTP Request" EnableCookies="True" FileOverwrite="AutoRename" FollowRedirects="True" FormDataParts="[New List (Of FormDataPart) From _&#xA;{&#xA;&#x9;New FileFormDataPart(),&#xA;&#x9;New BinaryFormDataPart(),&#xA;&#x9;New TextFormDataPart()&#xA;}]" Headers="[new System.Collections.Generic.Dictionary(Of System.String, System.String) From { { &quot;Authorization&quot;, &quot;Bearer &quot; + AuthToken } }]" sap:VirtualizedContainerService.HintSize="416,57.333333333333336" sap2010:WorkflowViewState.IdRef="NetHttpRequest_2" InitialDelay="500" MaxRedirects="3" MaxRetryAfterDelay="30000" Method="GET" Multiplier="2" PreferRetryAfterValue="True" RequestBodyType="None" RequestUrl="[ApiEndpoint + &quot;/chat/logs&quot;]" RetryCount="3" RetryPolicyType="Basic" RetryStatusCodes="[New List (Of System.Net.HttpStatusCode) From _&#xA;{&#xA;&#x9;System.Net.HttpStatusCode.RequestTimeout,&#xA;&#x9;System.Net.HttpStatusCode.TooManyRequests,&#xA;&#x9;System.Net.HttpStatusCode.InternalServerError,&#xA;&#x9;System.Net.HttpStatusCode.BadGateway,&#xA;&#x9;System.Net.HttpStatusCode.ServiceUnavailable,&#xA;&#x9;System.Net.HttpStatusCode.GatewayTimeout&#xA;}]" SaveRawRequestResponse="False" SaveResponseAsFile="False" TextPayloadContentType="application/json" TextPayloadEncoding="UTF-8" TlsProtocol="Automatic" UseJitter="True" UseOsNegotiatedAuthCredentials="True">
-              <uwah:NetHttpRequest.TimeoutInMiliseconds>
-                <InArgument x:TypeArguments="s:Nullable(x:Int32)">
-                  <Literal x:TypeArguments="s:Nullable(x:Int32)" Value="10000" />
-                </InArgument>
-              </uwah:NetHttpRequest.TimeoutInMiliseconds>
-              <sap:WorkflowViewStateService.ViewState>
-                <scg:Dictionary x:TypeArguments="x:String, x:Object">
-                  <x:Boolean x:Key="IsExpanded">False</x:Boolean>
-                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
-                </scg:Dictionary>
-              </sap:WorkflowViewStateService.ViewState>
-            </uwah:NetHttpRequest>
-            <Assign sap:VirtualizedContainerService.HintSize="416,176.66666666666666" sap2010:WorkflowViewState.IdRef="Assign_1">
-              <Assign.To>
-                <OutArgument x:TypeArguments="x:String">[ChatbotResponse]</OutArgument>
-              </Assign.To>
-              <Assign.Value>
-                <InArgument x:TypeArguments="x:String">[Out]</InArgument>
-              </Assign.Value>
-            </Assign>
-            <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="416,48" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="[&quot;Activity Update: &quot; + ChatbotResponse]">
-              <sap:WorkflowViewStateService.ViewState>
-                <scg:Dictionary x:TypeArguments="x:String, x:Object">
-                  <x:Boolean x:Key="IsExpanded">False</x:Boolean>
-                  <x:Boolean x:Key="IsPinned">False</x:Boolean>
-                </scg:Dictionary>
-              </sap:WorkflowViewStateService.ViewState>
-            </ui:LogMessage>
+            <ui:ForEach x:TypeArguments="x:String" CurrentIndex="{x:Null}" DisplayName="For Each currentText" sap:VirtualizedContainerService.HintSize="452,915.3333333333334" sap2010:WorkflowViewState.IdRef="ForEach`1_1" Values="[Commands]">
+              <ui:ForEach.Body>
+                <ActivityAction x:TypeArguments="x:String">
+                  <ActivityAction.Argument>
+                    <DelegateInArgument x:TypeArguments="x:String" Name="currentText" />
+                  </ActivityAction.Argument>
+                  <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="450,790" sap2010:WorkflowViewState.IdRef="Sequence_19">
+                    <sap:WorkflowViewStateService.ViewState>
+                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                      </scg:Dictionary>
+                    </sap:WorkflowViewStateService.ViewState>
+                    <uix:NTypeInto ActivateBefore="True" ClickBeforeMode="Single" ClipboardMode="Never" DisplayName="Type Into 'INPUT'" EmptyFieldMode="SingleLine" HealingAgentBehavior="SameAsCard" sap:VirtualizedContainerService.HintSize="416,292.6666666666667" sap2010:WorkflowViewState.IdRef="NTypeInto_3" InteractionMode="SameAsCard" ScopeIdentifier="4523e48f-0db4-4612-b2b0-35a72f3a37ec" Text="[currentText]" Version="V5">
+                      <uix:NTypeInto.Target>
+                        <uix:TargetAnchorable BrowserURL="localhost/dashboard" CVScreenId="35bd934b-58a8-44cd-b90e-d2f1e4611656" ContentHash="xouDN7qFSUieIV3Jyqg26g" CvElementArea="1473, 912, 394, 50" CvType="InputBox" DesignTimeRectangle="1474, 914, 335, 46" ElementType="InputBox" ElementVisibilityArgument="Interactive" FullSelectorArgument="&lt;webctrl tag='INPUT' /&gt;" Guid="81779ae8-904e-4775-981b-b75f5e295009" InformativeScreenshot="bfa545ae693f4e572ea296a5fe89f79f.png" Reference="2l4W1lvR7EKbTHgwBcIsiA/CvolPI9NKUqdLQBFUnxXXQ" ScopeSelectorArgument="&lt;html app='msedge.exe' title='Fraud Detection System' /&gt;" SearchSteps="Selector, CV" Version="V6" WaitForReadyArgument="Interactive" />
+                      </uix:NTypeInto.Target>
+                      <uix:NTypeInto.VerifyOptions>
+                        <uix:VerifyExecutionTypeIntoOptions DisplayName="{x:Null}" Mode="Appears">
+                          <uix:VerifyExecutionTypeIntoOptions.Retry>
+                            <InArgument x:TypeArguments="x:Boolean" />
+                          </uix:VerifyExecutionTypeIntoOptions.Retry>
+                          <uix:VerifyExecutionTypeIntoOptions.Timeout>
+                            <InArgument x:TypeArguments="x:Double" />
+                          </uix:VerifyExecutionTypeIntoOptions.Timeout>
+                        </uix:VerifyExecutionTypeIntoOptions>
+                      </uix:NTypeInto.VerifyOptions>
+                    </uix:NTypeInto>
+                    <Delay Duration="00:00:20" sap:VirtualizedContainerService.HintSize="416,124" sap2010:WorkflowViewState.IdRef="Delay_6" />
+                    <uix:NGetText DisplayName="Get Text 'Hi! I'm your Fraud Dete…'" HealingAgentBehavior="SameAsCard" sap:VirtualizedContainerService.HintSize="416,143.33333333333334" sap2010:WorkflowViewState.IdRef="NGetText_9" ScopeIdentifier="4523e48f-0db4-4612-b2b0-35a72f3a37ec" TextString="[botResponse]" Version="V5">
+                      <uix:NGetText.Target>
+                        <uix:TargetAnchorable BrowserURL="localhost/dashboard" ContentHash="RfYQX9jcCkm9oPeKibLKbg" DesignTimeRectangle="1456, 393, 425, 503" ElementVisibilityArgument="Interactive" FullSelectorArgument="&lt;webctrl class='chatbot-messages' parentid='root' tag='DIV' /&gt;" Guid="7a2d602d-7a8b-4b62-acbc-b27251738c22" InformativeScreenshot="8c7b4f97c0952205338c0e40734af113.png" Reference="2l4W1lvR7EKbTHgwBcIsiA/-Bj1NYJDtUWKRb4lg8WbKg" ScopeSelectorArgument="&lt;html app='msedge.exe' title='Fraud Detection System' /&gt;" SearchSteps="Selector" Version="V6" WaitForReadyArgument="Interactive" />
+                      </uix:NGetText.Target>
+                    </uix:NGetText>
+                    <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="416,170" sap2010:WorkflowViewState.IdRef="LogMessage_3" Level="Info" Message="[&quot;Command: &quot; + currentText + &quot; | Response: &quot; + botResponse]" />
+                  </Sequence>
+                </ActivityAction>
+              </ui:ForEach.Body>
+            </ui:ForEach>
           </Sequence>
-        </ui:InterruptibleWhile.Body>
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-            <x:Boolean x:Key="IsPinned">False</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </ui:InterruptibleWhile>
-    </Sequence>
+        </ActivityAction>
+      </uix:NApplicationCard.Body>
+      <uix:NApplicationCard.TargetApp>
+        <uix:TargetApp Area="-11, -11, 1942, 1030" BrowserType="Edge" ContentHash="3oECCIbMY0eNlceDQl7wPg" IconBase64="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" InformativeScreenshot="04f82f49d0fa5443fc6304cbdee9fa24.jpg" Reference="2l4W1lvR7EKbTHgwBcIsiA/7I0SXI5MC0WQQNG0OczMHQ" Selector="&lt;html app='msedge.exe' title='Fraud Detection System' /&gt;" Url="http://localhost:3000/" Version="V2" />
+      </uix:NApplicationCard.TargetApp>
+    </uix:NApplicationCard>
   </Sequence>
 </Activity>

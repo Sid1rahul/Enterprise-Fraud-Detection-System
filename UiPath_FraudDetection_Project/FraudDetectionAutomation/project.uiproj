@@ -1,6 +1,6 @@
 {
   "Name": "FraudDetectionAutomation",
   "ProjectType": "Process",
-  "Description": "",
+  "Description": "Automated fraud detection system interaction with chatbot integration",
   "MainFile": "Main.xaml"
 }
