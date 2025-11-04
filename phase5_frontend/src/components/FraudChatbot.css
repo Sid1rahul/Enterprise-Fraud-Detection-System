@@ -407,6 +407,78 @@
   }
 }
 
+/* Wake word indicator */
+.wake-word-indicator {
+  position: fixed;
+  bottom: 30px;
+  right: 110px;
+  width: 50px;
+  height: 50px;
+  background: var(--bg-secondary);
+  border: 2px solid var(--border-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  z-index: 999;
+  color: var(--text-muted);
+}
+
+.wake-word-indicator:hover {
+  transform: scale(1.1);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+.wake-word-indicator.listening {
+  background: linear-gradient(135deg, #00d4ff, #7b2ff7);
+  border-color: var(--accent-primary);
+  color: white;
+  box-shadow: 0 8px 25px rgba(0, 212, 255, 0.4);
+}
+
+.wake-word-indicator.listening:hover {
+  box-shadow: 0 12px 35px rgba(0, 212, 255, 0.6);
+}
+
+.listening-pulse {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  opacity: 0.6;
+  animation: pulse 2s infinite;
+}
+
+/* Wake word button in header */
+.wake-word-btn {
+  color: var(--text-muted);
+  transition: all var(--transition-fast);
+}
+
+.wake-word-btn.active {
+  color: #00ff88;
+  animation: wakeWordGlow 2s infinite;
+}
+
+.wake-word-btn:hover {
+  color: var(--accent-primary);
+}
+
+@keyframes wakeWordGlow {
+  0%, 100% {
+    opacity: 1;
+    text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+  }
+  50% {
+    opacity: 0.7;
+    text-shadow: 0 0 20px rgba(0, 255, 136, 0.8);
+  }
+}
+
 /* Custom scrollbar */
 .chatbot-messages::-webkit-scrollbar {
   width: 6px;

@@ -13,7 +13,8 @@ import {
   FileText,
   Mic,
   Square,
-  Volume2
+  Volume2,
+  Ear
 } from 'lucide-react';
 import { fraudAPI } from '../utils/api';
 import './FraudChatbot.css';
@@ -28,10 +29,13 @@ const FraudChatbot = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
   const [isVoiceSupported, setIsVoiceSupported] = useState(false);
+  const [isWakeWordListening, setIsWakeWordListening] = useState(false);
+  const [wakeWordDetected, setWakeWordDetected] = useState(false);
   const messagesEndRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const recognitionRef = useRef(null);
   const recordingIntervalRef = useRef(null);
+  const wakeWordRecognitionRef = useRef(null);
 
   // UiPath Studio connection status
   const [uiPathStatus, setUiPathStatus] = useState('disconnected');
@@ -61,6 +65,7 @@ const FraudChatbot = () => {
     setIsVoiceSupported(!!SpeechRecognition);
     
     if (SpeechRecognition) {
+      // Regular voice input recognition
       recognitionRef.current = new SpeechRecognition();
       recognitionRef.current.continuous = false;
       recognitionRef.current.interimResults = false;
@@ -75,6 +80,71 @@ const FraudChatbot = () => {
       recognitionRef.current.onerror = (event) => {
         console.error('Speech recognition error:', event.error);
         stopRecording();
+      };
+
+      // Wake word detection recognition
+      wakeWordRecognitionRef.current = new SpeechRecognition();
+      wakeWordRecognitionRef.current.continuous = true;
+      wakeWordRecognitionRef.current.interimResults = true;
+      wakeWordRecognitionRef.current.lang = 'en-US';
+      
+      wakeWordRecognitionRef.current.onresult = (event) => {
+        const transcript = Array.from(event.results)
+          .map(result => result[0].transcript.toLowerCase())
+          .join(' ');
+        
+        // Check for wake word variations
+        if (transcript.includes('hey fraud detector') || 
+            transcript.includes('hey fraud') || 
+            transcript.includes('fraud detector')) {
+          setWakeWordDetected(true);
+          stopWakeWordListening();
+          
+          // Open chatbot and show wake word detected message
+          setIsOpen(true);
+          setIsMinimized(false);
+          
+          const newMessage = {
+            id: Date.now(),
+            type: 'bot',
+            message: '👋 I heard "Hey Fraud Detector"! How can I help you today?',
+            timestamp: new Date().toISOString(),
+            suggestions: [
+              'Check system health',
+              'Analyze a transaction',
+              'Show fraud statistics'
+            ]
+          };
+          
+          setMessages(prev => [...prev, newMessage]);
+          
+          // Auto-start voice recording after 1 second
+          setTimeout(() => {
+            startRecording();
+          }, 1000);
+          
+          // Reset wake word detection after 30 seconds
+          setTimeout(() => {
+            setWakeWordDetected(false);
+          }, 30000);
+        }
+      };
+      
+      wakeWordRecognitionRef.current.onerror = (event) => {
+        if (event.error !== 'no-speech' && event.error !== 'aborted') {
+          console.error('Wake word detection error:', event.error);
+        }
+      };
+      
+      wakeWordRecognitionRef.current.onend = () => {
+        // Restart if still supposed to be listening
+        if (isWakeWordListening && !wakeWordDetected) {
+          try {
+            wakeWordRecognitionRef.current.start();
+          } catch (error) {
+            console.error('Error restarting wake word detection:', error);
+          }
+        }
       };
     }
 
@@ -545,13 +615,59 @@ Just type naturally, and I'll help you out! 😊`;
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
+  // Wake word detection functions
+  const startWakeWordListening = () => {
+    if (!isVoiceSupported || !wakeWordRecognitionRef.current) {
+      return;
+    }
+
+    try {
+      setIsWakeWordListening(true);
+      wakeWordRecognitionRef.current.start();
+    } catch (error) {
+      console.error('Error starting wake word detection:', error);
+    }
+  };
+
+  const stopWakeWordListening = () => {
+    setIsWakeWordListening(false);
+    
+    if (wakeWordRecognitionRef.current) {
+      try {
+        wakeWordRecognitionRef.current.stop();
+      } catch (error) {
+        console.error('Error stopping wake word detection:', error);
+      }
+    }
+  };
+
+  const toggleWakeWordListening = () => {
+    if (isWakeWordListening) {
+      stopWakeWordListening();
+    } else {
+      startWakeWordListening();
+    }
+  };
+
   if (!isOpen) {
     return (
-      <div className="chatbot-trigger" onClick={() => setIsOpen(true)}>
-        <MessageCircle size={24} />
-        <div className="trigger-pulse"></div>
-        {isConnected && <div className="uipath-indicator">UiPath</div>}
-      </div>
+      <>
+        <div className="chatbot-trigger" onClick={() => setIsOpen(true)}>
+          <MessageCircle size={24} />
+          <div className="trigger-pulse"></div>
+          {isConnected && <div className="uipath-indicator">UiPath</div>}
+        </div>
+        {isVoiceSupported && (
+          <div 
+            className={`wake-word-indicator ${isWakeWordListening ? 'listening' : ''}`}
+            onClick={toggleWakeWordListening}
+            title={isWakeWordListening ? 'Wake word active - Say "Hey Fraud Detector"' : 'Click to enable wake word'}
+          >
+            <Ear size={20} />
+            {isWakeWordListening && <div className="listening-pulse"></div>}
+          </div>
+        )}
+      </>
     );
   }
 
@@ -568,6 +684,15 @@ Just type naturally, and I'll help you out! 😊`;
           </div>
         </div>
         <div className="header-controls">
+          {isVoiceSupported && (
+            <button 
+              onClick={toggleWakeWordListening}
+              className={`control-btn wake-word-btn ${isWakeWordListening ? 'active' : ''}`}
+              title={isWakeWordListening ? 'Wake word active' : 'Enable wake word'}
+            >
+              <Ear size={16} />
+            </button>
+          )}
           <button 
             onClick={() => setIsMinimized(!isMinimized)}
             className="control-btn"
