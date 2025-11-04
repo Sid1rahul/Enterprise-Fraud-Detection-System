@@ -75,20 +75,26 @@ const Analytics = () => {
 
   const merchantRiskData = generateMerchantRiskData(timeRange);
 
-  const hourlyPatternData = [
-    { hour: '00', normal: 45, fraud: 8 },
-    { hour: '02', normal: 23, fraud: 12 },
-    { hour: '04', normal: 18, fraud: 15 },
-    { hour: '06', normal: 67, fraud: 5 },
-    { hour: '08', normal: 156, fraud: 3 },
-    { hour: '10', normal: 234, fraud: 2 },
-    { hour: '12', normal: 289, fraud: 4 },
-    { hour: '14', normal: 267, fraud: 3 },
-    { hour: '16', normal: 245, fraud: 5 },
-    { hour: '18', normal: 198, fraud: 7 },
-    { hour: '20', normal: 167, fraud: 9 },
-    { hour: '22', normal: 123, fraud: 11 }
-  ];
+  // Generate hourly pattern data based on time range
+  const generateHourlyPatternData = (range) => {
+    const multiplier = range === '1d' ? 1 : range === '7d' ? 7 : range === '30d' ? 30 : 90;
+    return [
+      { hour: '00', normal: Math.floor(45 * multiplier), fraud: Math.floor(8 * multiplier) },
+      { hour: '02', normal: Math.floor(23 * multiplier), fraud: Math.floor(12 * multiplier) },
+      { hour: '04', normal: Math.floor(18 * multiplier), fraud: Math.floor(15 * multiplier) },
+      { hour: '06', normal: Math.floor(67 * multiplier), fraud: Math.floor(5 * multiplier) },
+      { hour: '08', normal: Math.floor(156 * multiplier), fraud: Math.floor(3 * multiplier) },
+      { hour: '10', normal: Math.floor(234 * multiplier), fraud: Math.floor(2 * multiplier) },
+      { hour: '12', normal: Math.floor(289 * multiplier), fraud: Math.floor(4 * multiplier) },
+      { hour: '14', normal: Math.floor(267 * multiplier), fraud: Math.floor(3 * multiplier) },
+      { hour: '16', normal: Math.floor(245 * multiplier), fraud: Math.floor(5 * multiplier) },
+      { hour: '18', normal: Math.floor(198 * multiplier), fraud: Math.floor(7 * multiplier) },
+      { hour: '20', normal: Math.floor(167 * multiplier), fraud: Math.floor(9 * multiplier) },
+      { hour: '22', normal: Math.floor(123 * multiplier), fraud: Math.floor(11 * multiplier) }
+    ];
+  };
+
+  const hourlyPatternData = generateHourlyPatternData(timeRange);
 
   const modelPerformanceData = [
     { metric: 'Accuracy', xgboost: 98.7, isolation_forest: 96.3, ensemble: 99.1 },

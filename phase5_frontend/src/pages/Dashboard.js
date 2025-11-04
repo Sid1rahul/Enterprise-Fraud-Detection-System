@@ -58,20 +58,18 @@ const Dashboard = ({ user }) => {
       };
     }
 
-    // Generate trend data based on transactions
+    // Generate trend data - SYNCHRONIZED with Analytics page
     const trendData = [];
     for (let i = 6; i >= 0; i--) {
       const date = new Date();
       date.setDate(date.getDate() - i);
-      const dayTransactions = Math.floor(Math.random() * 500) + 800;
-      const dayFraud = Math.floor(dayTransactions * (0.002 + Math.random() * 0.008));
-      const dayBlocked = Math.floor(dayFraud * (0.8 + Math.random() * 0.2));
       
       trendData.push({
         date: date.toISOString().split('T')[0],
-        transactions: dayTransactions,
-        fraud: dayFraud,
-        blocked: dayBlocked
+        transactions: Math.floor(1000 + Math.random() * 800),
+        fraud: Math.floor(2 + Math.random() * 8),
+        blocked: Math.floor(1 + Math.random() * 7),
+        amount: Math.floor(30000 + Math.random() * 50000)
       });
     }
 

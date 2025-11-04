@@ -112,15 +112,7 @@ const RealTimeMonitoring = ({ user }) => {
         try {
           const status = await fraudAPI.getMonitoringStatus(currentSessionId);
           
-          // Update stats from session status
-          setStats({
-            totalProcessed: status.processed_count,
-            fraudDetected: status.fraud_detected,
-            fraudRate: status.processed_count > 0 ? (status.fraud_detected / status.processed_count) * 100 : 0,
-            avgProcessingTime: Math.random() * 50 + 10 // Mock processing time
-          });
-          
-          // Add current transaction to display
+          // Add current transaction to display first
           if (status.current_transaction) {
             const newTransaction = {
               id: status.current_transaction.id,
@@ -128,10 +120,26 @@ const RealTimeMonitoring = ({ user }) => {
               merchant: status.current_transaction.merchant,
               customer_id: `CUST_${Math.floor(Math.random() * 1000)}`,
               timestamp: new Date(),
-              risk_score: status.current_transaction.risk_score
+              risk_score: status.current_transaction.risk_score,
+              isFraud: status.current_transaction.risk_score > 0.7
             };
             
-            setTransactions(prev => [newTransaction, ...prev.slice(0, 49)]); // Keep last 50
+            setTransactions(prev => {
+              const updated = [newTransaction, ...prev.slice(0, 49)];
+              
+              // Calculate fraud count from actual displayed transactions
+              const actualFraudCount = updated.filter(t => t.risk_score > 0.7).length;
+              
+              // Update stats with synchronized counts
+              setStats({
+                totalProcessed: updated.length,
+                fraudDetected: actualFraudCount,
+                fraudRate: updated.length > 0 ? (actualFraudCount / updated.length) * 100 : 0,
+                avgProcessingTime: Math.random() * 50 + 10
+              });
+              
+              return updated;
+            });
           }
           
           // Get recent fraud alerts
