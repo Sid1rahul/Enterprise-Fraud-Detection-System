@@ -36,25 +36,44 @@ const Analytics = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [lastUpdated, setLastUpdated] = useState(new Date());
 
-  // Mock data for charts
-  const fraudTrendData = [
-    { date: '2024-01-01', transactions: 1200, fraud: 3, blocked: 2, amount: 45000 },
-    { date: '2024-01-02', transactions: 1350, fraud: 5, blocked: 4, amount: 52000 },
-    { date: '2024-01-03', transactions: 1100, fraud: 2, blocked: 2, amount: 38000 },
-    { date: '2024-01-04', transactions: 1450, fraud: 7, blocked: 6, amount: 67000 },
-    { date: '2024-01-05', transactions: 1600, fraud: 4, blocked: 3, amount: 58000 },
-    { date: '2024-01-06', transactions: 1300, fraud: 6, blocked: 5, amount: 49000 },
-    { date: '2024-01-07', transactions: 1800, fraud: 8, blocked: 7, amount: 72000 }
-  ];
+  // Generate dynamic data based on time range
+  const generateFraudTrendData = (range) => {
+    const days = range === '1d' ? 1 : range === '7d' ? 7 : range === '30d' ? 30 : 90;
+    const data = [];
+    const today = new Date();
+    
+    for (let i = days - 1; i >= 0; i--) {
+      const date = new Date(today);
+      date.setDate(date.getDate() - i);
+      const dateStr = date.toISOString().split('T')[0];
+      
+      data.push({
+        date: dateStr,
+        transactions: Math.floor(1000 + Math.random() * 800),
+        fraud: Math.floor(2 + Math.random() * 8),
+        blocked: Math.floor(1 + Math.random() * 7),
+        amount: Math.floor(30000 + Math.random() * 50000)
+      });
+    }
+    return data;
+  };
 
-  const merchantRiskData = [
-    { merchant: 'Online Electronics', risk: 8.5, transactions: 450, fraudCount: 12 },
-    { merchant: 'Cash Advance', risk: 9.2, transactions: 120, fraudCount: 8 },
-    { merchant: 'Gas Stations', risk: 2.1, transactions: 890, fraudCount: 3 },
-    { merchant: 'Grocery Stores', risk: 1.5, transactions: 1200, fraudCount: 2 },
-    { merchant: 'Restaurants', risk: 2.8, transactions: 670, fraudCount: 4 },
-    { merchant: 'ATM Withdrawals', risk: 6.7, transactions: 340, fraudCount: 9 }
-  ];
+  const fraudTrendData = generateFraudTrendData(timeRange);
+
+  // Generate merchant risk data based on time range
+  const generateMerchantRiskData = (range) => {
+    const multiplier = range === '1d' ? 0.1 : range === '7d' ? 1 : range === '30d' ? 4 : 12;
+    return [
+      { merchant: 'Online Electronics', risk: 8.5, transactions: Math.floor(450 * multiplier), fraudCount: Math.floor(12 * multiplier) },
+      { merchant: 'Cash Advance', risk: 9.2, transactions: Math.floor(120 * multiplier), fraudCount: Math.floor(8 * multiplier) },
+      { merchant: 'Gas Stations', risk: 2.1, transactions: Math.floor(890 * multiplier), fraudCount: Math.floor(3 * multiplier) },
+      { merchant: 'Grocery Stores', risk: 1.5, transactions: Math.floor(1200 * multiplier), fraudCount: Math.floor(2 * multiplier) },
+      { merchant: 'Restaurants', risk: 2.8, transactions: Math.floor(670 * multiplier), fraudCount: Math.floor(4 * multiplier) },
+      { merchant: 'ATM Withdrawals', risk: 6.7, transactions: Math.floor(340 * multiplier), fraudCount: Math.floor(9 * multiplier) }
+    ];
+  };
+
+  const merchantRiskData = generateMerchantRiskData(timeRange);
 
   const hourlyPatternData = [
     { hour: '00', normal: 45, fraud: 8 },
@@ -79,11 +98,17 @@ const Analytics = () => {
     { metric: 'AUC', xgboost: 97.3, isolation_forest: 94.8, ensemble: 98.2 }
   ];
 
-  const riskDistribution = [
-    { name: 'Low Risk', value: 85, color: '#00ff88' },
-    { name: 'Medium Risk', value: 12, color: '#ffaa00' },
-    { name: 'High Risk', value: 3, color: '#ff4757' }
-  ];
+  // Generate risk distribution based on time range
+  const generateRiskDistribution = (range) => {
+    const totalTransactions = range === '1d' ? 100 : range === '7d' ? 700 : range === '30d' ? 3000 : 9000;
+    return [
+      { name: 'Low Risk', value: Math.floor(totalTransactions * 0.85), color: '#00ff88' },
+      { name: 'Medium Risk', value: Math.floor(totalTransactions * 0.12), color: '#ffaa00' },
+      { name: 'High Risk', value: Math.floor(totalTransactions * 0.03), color: '#ff4757' }
+    ];
+  };
+
+  const riskDistribution = generateRiskDistribution(timeRange);
 
   const handleRefresh = async () => {
     setRefreshing(true);
