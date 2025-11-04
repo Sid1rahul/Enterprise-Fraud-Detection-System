@@ -84,8 +84,8 @@ const FraudChatbot = () => {
 
       // Wake word detection recognition
       wakeWordRecognitionRef.current = new SpeechRecognition();
-      wakeWordRecognitionRef.current.continuous = true;
-      wakeWordRecognitionRef.current.interimResults = true;
+      wakeWordRecognitionRef.current.continuous = false; // Changed to false to prevent auto-restart
+      wakeWordRecognitionRef.current.interimResults = false; // Changed to false
       wakeWordRecognitionRef.current.lang = 'en-US';
       
       wakeWordRecognitionRef.current.onresult = (event) => {
@@ -118,10 +118,8 @@ const FraudChatbot = () => {
           
           setMessages(prev => [...prev, newMessage]);
           
-          // Auto-start voice recording after 1 second
-          setTimeout(() => {
-            startRecording();
-          }, 1000);
+          // Don't auto-start recording to prevent interference
+          // User can manually click mic button
           
           // Reset wake word detection after 30 seconds
           setTimeout(() => {
@@ -134,22 +132,14 @@ const FraudChatbot = () => {
         if (event.error !== 'no-speech' && event.error !== 'aborted') {
           console.error('Wake word detection error:', event.error);
         }
+        // Stop on any error to prevent continuous triggering
+        stopWakeWordListening();
       };
       
       wakeWordRecognitionRef.current.onend = () => {
-        // Only restart if chatbot is closed and wake word listening is active
-        if (isWakeWordListening && !wakeWordDetected && !isOpen) {
-          try {
-            // Add delay before restarting to prevent continuous triggering
-            setTimeout(() => {
-              if (isWakeWordListening && !isOpen && wakeWordRecognitionRef.current) {
-                wakeWordRecognitionRef.current.start();
-              }
-            }, 500);
-          } catch (error) {
-            console.error('Error restarting wake word detection:', error);
-          }
-        }
+        // DO NOT auto-restart - user must manually enable wake word each time
+        // This prevents the auto-filling issue
+        setIsWakeWordListening(false);
       };
     }
 
