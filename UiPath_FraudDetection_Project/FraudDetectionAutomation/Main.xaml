@@ -244,15 +244,11 @@
       <AssemblyReference>UiPath.Mail</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence sap2010:Annotation.AnnotationText="" DisplayName="Main Sequence" sap:VirtualizedContainerService.HintSize="754,1313.3333333333333" sap2010:WorkflowViewState.IdRef="Sequence_1">
+  <Sequence sap2010:Annotation.AnnotationText="" DisplayName="Main Sequence" sap:VirtualizedContainerService.HintSize="754,1273.3333333333333" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
       <Variable x:TypeArguments="moiw:Browser" Name="Browser" />
       <Variable x:TypeArguments="x:String" Name="ResponseText" />
-      <Variable x:TypeArguments="s:String[]" Name="Commands">
-        <Variable.Default>
-          <VisualBasicValue x:TypeArguments="s:String[]" ExpressionText="{}{&quot;Check system health&quot;,&quot;Analyze a transaction&quot;,&quot;Show fraud statistics&quot;,&quot;Upload transaction file&quot;}" />
-        </Variable.Default>
-      </Variable>
+      <Variable x:TypeArguments="s:String[]" Default="[{&quot;Check system health&quot;,&quot;Analyze a transaction&quot;,&quot;Show fraud statistics&quot;,&quot;Upload transaction file&quot;}]" Name="Commands" />
     </Sequence.Variables>
     <sap:WorkflowViewStateService.ViewState>
       <scg:Dictionary x:TypeArguments="x:String, x:Object">
@@ -260,7 +256,7 @@
         <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
       </scg:Dictionary>
     </sap:WorkflowViewStateService.ViewState>
-    <uix:NApplicationCard AttachMode="ByInstance" DisplayName="Edge Fraud Detection System(3)" HealingAgentBehavior="Job" sap:VirtualizedContainerService.HintSize="520,1260" sap2010:WorkflowViewState.IdRef="NApplicationCard_12" InteractionMode="DebuggerApi" ScopeGuid="4523e48f-0db4-4612-b2b0-35a72f3a37ec" Version="V2">
+    <uix:NApplicationCard AttachMode="ByInstance" DisplayName="Edge Fraud Detection System(3)" HealingAgentBehavior="Job" sap:VirtualizedContainerService.HintSize="520,1220" sap2010:WorkflowViewState.IdRef="NApplicationCard_12" InteractionMode="DebuggerApi" ScopeGuid="4523e48f-0db4-4612-b2b0-35a72f3a37ec" Version="V2">
       <uix:NApplicationCard.Body>
         <ActivityAction x:TypeArguments="x:Object">
           <ActivityAction.Argument>
@@ -302,7 +298,7 @@
                         </uix:VerifyExecutionTypeIntoOptions>
                       </uix:NTypeInto.VerifyOptions>
                     </uix:NTypeInto>
-                    <Delay Duration="00:00:20" sap:VirtualizedContainerService.HintSize="416,124" sap2010:WorkflowViewState.IdRef="Delay_6" />
+                    <Delay Duration="00:01:00" sap:VirtualizedContainerService.HintSize="416,124" sap2010:WorkflowViewState.IdRef="Delay_6" />
                     <uix:NGetText DisplayName="Get Text 'Hi! I'm your Fraud Dete…'" HealingAgentBehavior="SameAsCard" sap:VirtualizedContainerService.HintSize="416,143.33333333333334" sap2010:WorkflowViewState.IdRef="NGetText_9" ScopeIdentifier="4523e48f-0db4-4612-b2b0-35a72f3a37ec" TextString="[botResponse]" Version="V5">
                       <uix:NGetText.Target>
                         <uix:TargetAnchorable BrowserURL="localhost/dashboard" ContentHash="RfYQX9jcCkm9oPeKibLKbg" DesignTimeRectangle="1456, 393, 425, 503" ElementVisibilityArgument="Interactive" FullSelectorArgument="&lt;webctrl class='chatbot-messages' parentid='root' tag='DIV' /&gt;" Guid="7a2d602d-7a8b-4b62-acbc-b27251738c22" InformativeScreenshot="8c7b4f97c0952205338c0e40734af113.png" Reference="2l4W1lvR7EKbTHgwBcIsiA/-Bj1NYJDtUWKRb4lg8WbKg" ScopeSelectorArgument="&lt;html app='msedge.exe' title='Fraud Detection System' /&gt;" SearchSteps="Selector" Version="V6" WaitForReadyArgument="Interactive" />

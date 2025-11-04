@@ -137,10 +137,15 @@ const FraudChatbot = () => {
       };
       
       wakeWordRecognitionRef.current.onend = () => {
-        // Restart if still supposed to be listening
-        if (isWakeWordListening && !wakeWordDetected) {
+        // Only restart if chatbot is closed and wake word listening is active
+        if (isWakeWordListening && !wakeWordDetected && !isOpen) {
           try {
-            wakeWordRecognitionRef.current.start();
+            // Add delay before restarting to prevent continuous triggering
+            setTimeout(() => {
+              if (isWakeWordListening && !isOpen && wakeWordRecognitionRef.current) {
+                wakeWordRecognitionRef.current.start();
+              }
+            }, 500);
           } catch (error) {
             console.error('Error restarting wake word detection:', error);
           }
@@ -652,7 +657,13 @@ Just type naturally, and I'll help you out! 😊`;
   if (!isOpen) {
     return (
       <>
-        <div className="chatbot-trigger" onClick={() => setIsOpen(true)}>
+        <div className="chatbot-trigger" onClick={() => {
+          setIsOpen(true);
+          // Stop wake word detection when manually opening chatbot
+          if (isWakeWordListening) {
+            stopWakeWordListening();
+          }
+        }}>
           <MessageCircle size={24} />
           <div className="trigger-pulse"></div>
           {isConnected && <div className="uipath-indicator">UiPath</div>}

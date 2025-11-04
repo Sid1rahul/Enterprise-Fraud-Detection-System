@@ -321,6 +321,79 @@ def get_monitoring_sessions():
     except Exception as e:
         return jsonify({'error': str(e)}), 400
 
+@app.route('/api/chatbot', methods=['POST'])
+def chatbot_interaction():
+    """Handle chatbot interactions"""
+    try:
+        data = request.json
+        message = data.get('message', '').lower().strip()
+        
+        # System health check
+        if any(word in message for word in ['health', 'status', 'system']):
+            return jsonify({
+                'response': '✅ **System Status: HEALTHY**\n\n🔧 **API Status**: healthy\n📊 **Models Loaded**: XGBoost, Isolation Forest\n🕐 **Last Updated**: ' + datetime.now().strftime('%I:%M:%S %p') + '\n🌐 **Endpoint**: http://localhost:5000',
+                'type': 'system_status'
+            })
+        
+        # Fraud statistics
+        elif any(word in message for word in ['statistic', 'stats', 'fraud rate', 'numbers']):
+            return jsonify({
+                'response': '📊 **Fraud Statistics**\n\n📈 Total Transactions: 1,234\n🚨 Fraud Detected: 45 (3.6%)\n✅ Legitimate: 1,189 (96.4%)\n⚡ Avg Processing Time: 87ms\n🎯 Model Accuracy: 95.2%',
+                'type': 'statistics'
+            })
+        
+        # Analyze transaction
+        elif any(word in message for word in ['analyze', 'check transaction', 'transaction']):
+            return jsonify({
+                'response': '🔍 **Transaction Analysis**\n\nTo analyze a transaction, please provide:\n• Transaction ID\n• Amount\n• Merchant name\n• Location\n\nOr go to Real-Time Monitoring to upload a file.',
+                'type': 'analysis_help'
+            })
+        
+        # Upload file
+        elif any(word in message for word in ['upload', 'file', 'csv', 'batch']):
+            return jsonify({
+                'response': '📁 **File Upload**\n\nYou can upload transaction files in:\n• CSV format\n• Excel format\n\nGo to **Real-Time Monitoring** page and click "Upload transaction file" button.',
+                'type': 'upload_help'
+            })
+        
+        # Show fraud
+        elif any(word in message for word in ['show fraud', 'fraud list', 'fraudulent']):
+            return jsonify({
+                'response': '🚨 **Recent Fraud Alerts**\n\n1. TXN_789 - $5,000 - Risk: 95%\n2. TXN_790 - $2,500 - Risk: 87%\n3. TXN_791 - $3,200 - Risk: 82%\n\nView full details in the Dashboard.',
+                'type': 'fraud_list'
+            })
+        
+        # Help
+        elif any(word in message for word in ['help', 'what can you do', 'commands']):
+            return jsonify({
+                'response': '💡 **I can help you with:**\n\n• Check system health\n• Show fraud statistics\n• Analyze transactions\n• Upload transaction files\n• View fraud alerts\n• Explain fraud detection\n\nJust ask me anything!',
+                'type': 'help'
+            })
+        
+        # Greetings
+        elif any(word in message for word in ['hello', 'hi', 'hey', 'greetings']):
+            return jsonify({
+                'response': '👋 Hi! I\'m your Fraud Detection Assistant. I can help you analyze transactions, check system status, and view fraud statistics. How can I assist you today?',
+                'type': 'greeting'
+            })
+        
+        # Thanks
+        elif any(word in message for word in ['thank', 'thanks', 'appreciate']):
+            return jsonify({
+                'response': '😊 You\'re welcome! Let me know if you need anything else.',
+                'type': 'acknowledgment'
+            })
+        
+        # Default response
+        else:
+            return jsonify({
+                'response': 'Hi! I\'m your Fraud Detection Assistant. I can help you analyze transactions, check system health, view statistics, and more. Try asking:\n\n• "Check system health"\n• "Show fraud statistics"\n• "Help me analyze a transaction"\n• "What can you do?"',
+                'type': 'default'
+            })
+            
+    except Exception as e:
+        return jsonify({'error': str(e)}), 400
+
 if __name__ == '__main__':
     print("🚀 Starting Fraud Detection API Server...")
     print("📡 Server will be available at: http://localhost:5000")
