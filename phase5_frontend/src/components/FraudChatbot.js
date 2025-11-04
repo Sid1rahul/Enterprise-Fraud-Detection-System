@@ -10,7 +10,10 @@ import {
   AlertTriangle,
   CheckCircle,
   Activity,
-  FileText
+  FileText,
+  Mic,
+  Square,
+  Volume2
 } from 'lucide-react';
 import { fraudAPI } from '../utils/api';
 import './FraudChatbot.css';
@@ -22,7 +25,13 @@ const FraudChatbot = () => {
   const [inputMessage, setInputMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
+  const [recordingTime, setRecordingTime] = useState(0);
+  const [isVoiceSupported, setIsVoiceSupported] = useState(false);
   const messagesEndRef = useRef(null);
+  const mediaRecorderRef = useRef(null);
+  const recognitionRef = useRef(null);
+  const recordingIntervalRef = useRef(null);
 
   // UiPath Studio connection status
   const [uiPathStatus, setUiPathStatus] = useState('disconnected');
@@ -35,7 +44,7 @@ const FraudChatbot = () => {
         {
           id: 1,
           type: 'bot',
-          message: '🤖 Hi! I\'m your Fraud Detection Assistant. I can help you analyze transactions, check system status, or guide you through the platform.',
+          message: '🤖 Hi! I\'m your Fraud Detection Assistant. I can help you analyze transactions, check system status, or guide you through the platform. You can type or use voice!',
           timestamp: new Date().toISOString(),
           suggestions: [
             'Check system health',
@@ -47,8 +56,36 @@ const FraudChatbot = () => {
       ]);
     }
 
+    // Check voice support
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    setIsVoiceSupported(!!SpeechRecognition);
+    
+    if (SpeechRecognition) {
+      recognitionRef.current = new SpeechRecognition();
+      recognitionRef.current.continuous = false;
+      recognitionRef.current.interimResults = false;
+      recognitionRef.current.lang = 'en-US';
+      
+      recognitionRef.current.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        setInputMessage(transcript);
+        stopRecording();
+      };
+      
+      recognitionRef.current.onerror = (event) => {
+        console.error('Speech recognition error:', event.error);
+        stopRecording();
+      };
+    }
+
     // Check UiPath Studio connection
     checkUiPathConnection();
+    
+    return () => {
+      if (recordingIntervalRef.current) {
+        clearInterval(recordingIntervalRef.current);
+      }
+    };
   }, [isOpen]);
 
   useEffect(() => {
@@ -453,6 +490,61 @@ Just type naturally, and I'll help you out! 😊`;
     }
   };
 
+  const startRecording = () => {
+    if (!isVoiceSupported || !recognitionRef.current) {
+      alert('Voice recognition is not supported in your browser. Please use Chrome or Edge.');
+      return;
+    }
+
+    try {
+      setIsRecording(true);
+      setRecordingTime(0);
+      
+      // Start recording timer
+      recordingIntervalRef.current = setInterval(() => {
+        setRecordingTime(prev => prev + 1);
+      }, 1000);
+      
+      // Start speech recognition
+      recognitionRef.current.start();
+    } catch (error) {
+      console.error('Error starting recording:', error);
+      stopRecording();
+    }
+  };
+
+  const stopRecording = () => {
+    setIsRecording(false);
+    setRecordingTime(0);
+    
+    if (recordingIntervalRef.current) {
+      clearInterval(recordingIntervalRef.current);
+      recordingIntervalRef.current = null;
+    }
+    
+    if (recognitionRef.current) {
+      try {
+        recognitionRef.current.stop();
+      } catch (error) {
+        console.error('Error stopping recognition:', error);
+      }
+    }
+  };
+
+  const handleVoiceButtonClick = () => {
+    if (isRecording) {
+      stopRecording();
+    } else {
+      startRecording();
+    }
+  };
+
+  const formatRecordingTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
   if (!isOpen) {
     return (
       <div className="chatbot-trigger" onClick={() => setIsOpen(true)}>
@@ -543,17 +635,33 @@ Just type naturally, and I'll help you out! 😊`;
           </div>
 
           <div className="chatbot-input">
+            {isRecording && (
+              <div className="recording-indicator">
+                <Volume2 size={16} className="recording-icon" />
+                <span>{formatRecordingTime(recordingTime)}</span>
+              </div>
+            )}
             <input
               type="text"
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
               onKeyPress={handleKeyPress}
-              placeholder="Ask me about fraud detection..."
+              placeholder={isRecording ? "Listening..." : "Type or speak your message..."}
               className="message-input"
+              disabled={isRecording}
             />
+            {isVoiceSupported && (
+              <button 
+                onClick={handleVoiceButtonClick}
+                className={`voice-btn ${isRecording ? 'recording' : ''}`}
+                title={isRecording ? "Stop recording" : "Start voice input"}
+              >
+                {isRecording ? <Square size={16} /> : <Mic size={16} />}
+              </button>
+            )}
             <button 
               onClick={handleSendMessage}
-              disabled={!inputMessage.trim() || isTyping}
+              disabled={!inputMessage.trim() || isTyping || isRecording}
               className="send-btn"
             >
               <Send size={16} />

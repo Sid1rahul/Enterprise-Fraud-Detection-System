@@ -272,10 +272,13 @@
 }
 
 .chatbot-input {
-  display: flex;
   padding: 1rem;
+  background: var(--bg-secondary);
   border-top: 1px solid var(--border-color);
-  background: var(--bg-primary);
+  display: flex;
+  gap: var(--space-sm);
+  position: relative;
+  align-items: center;
   border-radius: 0 0 16px 16px;
 }
 
@@ -320,6 +323,88 @@
 .send-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+/* Voice recording button */
+.voice-btn {
+  padding: 0.75rem;
+  background: var(--success);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+}
+
+.voice-btn:hover {
+  background: #00cc66;
+  transform: scale(1.1);
+}
+
+.voice-btn.recording {
+  background: var(--error);
+  animation: recordingPulse 1.5s infinite;
+}
+
+.voice-btn.recording:hover {
+  background: #ff3344;
+}
+
+@keyframes recordingPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(255, 71, 87, 0);
+  }
+}
+
+/* Recording indicator */
+.recording-indicator {
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--error);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(255, 71, 87, 0.4);
+  animation: slideDown 0.3s ease-out;
+}
+
+.recording-icon {
+  animation: recordingBlink 1s infinite;
+}
+
+@keyframes recordingBlink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
 }
 
 /* Custom scrollbar */
