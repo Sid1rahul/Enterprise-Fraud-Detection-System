@@ -16,10 +16,10 @@ import {
   Volume2,
   Ear
 } from 'lucide-react';
-import { fraudAPI } from '../utils/api';
+import { fraudAPI, formatCurrencyINR } from '../utils/api';
 import './FraudChatbot.css';
 
-const FraudChatbot = () => {
+const FraudChatbot = ({ user }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [messages, setMessages] = useState([]);
@@ -42,20 +42,29 @@ const FraudChatbot = () => {
   const [uiPathWorkflow, setUiPathWorkflow] = useState(null);
 
   useEffect(() => {
-    // Initialize chatbot with welcome message
     if (messages.length === 0) {
+      const role = user?.role || 'user';
+      const isCustomer = role === 'user';
+      const suggestions = isCustomer
+        ? [
+            'Why was this transaction flagged?',
+            'Show my recent flagged transactions',
+            'Show my transactions'
+          ]
+        : [
+            'Check system health',
+            'Analyze a transaction',
+            'Show fraud statistics',
+            'Upload transaction file'
+          ];
+
       setMessages([
         {
           id: 1,
           type: 'bot',
           message: '🤖 Hi! I\'m your Fraud Detection Assistant. I can help you analyze transactions, check system status, or guide you through the platform. You can type or use voice!',
           timestamp: new Date().toISOString(),
-          suggestions: [
-            'Check system health',
-            'Analyze a transaction',
-            'Show fraud statistics',
-            'Upload transaction file'
-          ]
+          suggestions
         }
       ]);
     }
@@ -151,7 +160,7 @@ const FraudChatbot = () => {
         clearInterval(recordingIntervalRef.current);
       }
     };
-  }, [isOpen]);
+  }, [isOpen, user]);
 
   useEffect(() => {
     scrollToBottom();
@@ -204,9 +213,19 @@ const FraudChatbot = () => {
       return { type: 'help' };
     }
     
+    if (lowerMessage.includes('why') && lowerMessage.includes('flagged')) {
+      return { type: 'why_flagged' };
+    }
+    
+    if ((lowerMessage.includes('recent') || lowerMessage.includes('last')) &&
+        lowerMessage.includes('flagged') &&
+        lowerMessage.includes('transaction')) {
+      return { type: 'recent_flagged' };
+    }
+    
     // Transaction analysis intent
-    if (lowerMessage.match(/analyze|check.*\$?\d+|fraud.*\$?\d+/i)) {
-      const amountMatch = message.match(/\$?(\d+(?:\.\d{2})?)/);
+    if (lowerMessage.match(/analyze|check.*[₹$]?\s*\d+|fraud.*[₹$]?\s*\d+/i)) {
+      const amountMatch = message.match(/[₹$]?\s*(\d+(?:\.\d{2})?)/);
       const merchantMatch = message.match(/at\s+([^,\s]+(?:\s+[^,\s]+)*)/i);
       
       return {
@@ -271,6 +290,8 @@ const FraudChatbot = () => {
 
   const processMessage = async (message) => {
     const intent = parseIntent(message);
+    const role = user?.role || 'user';
+    const isCustomer = role === 'user';
     let responseMessage = '';
     let suggestions = [];
 
@@ -278,7 +299,9 @@ const FraudChatbot = () => {
       switch (intent.type) {
         case 'greeting':
           responseMessage = getGreetingMessage();
-          suggestions = ['Check system health', 'Analyze a transaction', 'Show me around'];
+          suggestions = isCustomer
+            ? ['Why was this transaction flagged?', 'Show my recent flagged transactions', 'Show my transactions']
+            : ['Check system health', 'Analyze a transaction', 'Show me around'];
           break;
           
         case 'gratitude':
@@ -292,13 +315,29 @@ const FraudChatbot = () => {
           break;
           
         case 'help':
-          responseMessage = getHelpMessage();
-          suggestions = ['Check system health', 'Analyze transaction', 'Show statistics'];
+          responseMessage = getHelpMessage(role);
+          suggestions = isCustomer
+            ? ['Why was this transaction flagged?', 'Show my recent flagged transactions', 'Show my transactions']
+            : ['Check system health', 'Analyze transaction', 'Show statistics'];
           break;
           
         case 'compliment':
           responseMessage = getComplimentResponse();
           suggestions = ['Analyze a transaction', 'Show system status', 'What else can you do?'];
+          break;
+        
+        case 'why_flagged':
+          responseMessage = getWhyFlaggedMessage(role);
+          suggestions = isCustomer
+            ? ['Show my recent flagged transactions', 'How do I dispute a transaction?', 'Show my transactions']
+            : ['Show fraud statistics', 'Open Analytics', 'Show recent fraud alerts'];
+          break;
+        
+        case 'recent_flagged':
+          responseMessage = getRecentFlaggedMessage(role);
+          suggestions = isCustomer
+            ? ['Why was this transaction flagged?', 'How do I dispute a transaction?', 'Show system status']
+            : ['Check system health', 'Open Real-Time Monitoring', 'Show fraud statistics'];
           break;
           
         case 'transaction_analysis':
@@ -322,8 +361,10 @@ const FraudChatbot = () => {
           break;
           
         default:
-          responseMessage = getUnknownResponse();
-          suggestions = ['Check system health', 'Analyze transaction', 'Show statistics'];
+          responseMessage = getUnknownResponse(role);
+          suggestions = isCustomer
+            ? ['Why was this transaction flagged?', 'Show my recent flagged transactions', 'Show my transactions']
+            : ['Check system health', 'Analyze transaction', 'Show statistics'];
       }
     } catch (error) {
       responseMessage = '❌ Sorry, I encountered an error. Please make sure the fraud detection system is running.';
@@ -357,7 +398,7 @@ const FraudChatbot = () => {
 
       return `${icon} **Transaction Analysis Complete**
 
-💰 **Amount**: $${data.amount.toFixed(2)}
+💰 **Amount**: ${formatCurrencyINR(data.amount)}
 🏪 **Merchant**: ${data.merchant}
 📊 **Fraud Probability**: ${(response.fraud_probability * 100).toFixed(1)}%
 ⚡ **Risk Level**: ${riskLevel}
@@ -499,32 +540,98 @@ What would you like to explore?`;
     return responses[Math.floor(Math.random() * responses.length)];
   };
 
-  const getUnknownResponse = () => {
-    const responses = [
-      `🤔 I'm not quite sure I understand that. Could you try rephrasing? I'm great with fraud detection questions!`,
-      `🤖 Hmm, that's a bit outside my expertise. I specialize in fraud detection - try asking about transactions or system status!`,
-      `💭 I didn't catch that. I'm best at helping with fraud analysis, system health, and navigation. What would you like to know?`,
-      `🔍 That's interesting, but I'm focused on fraud detection. Ask me about analyzing transactions or checking system status!`
-    ];
-    return responses[Math.floor(Math.random() * responses.length)];
+  const getUnknownResponse = (role) => {
+    if (role === 'user') {
+      return `💡 I may not have understood that exactly, but I can help you with your card activity.
+
+Here are a few things you can ask me:
+- "Why was this transaction flagged?"
+- "Show my recent flagged transactions"
+- "Where can I see my past transactions?"
+
+If your question is about card limits, PIN, or KYC, please contact your bank's customer support using the number on the back of your card. For anything about suspicious transactions, I can guide you inside this dashboard.`;
+    }
+
+    return `💡 I might not have a direct answer for that, but I can still help you operate the fraud platform.
+
+Try rephrasing your question in terms of:
+- System health ("check system status")
+- Fraud statistics ("show fraud stats for today")
+- Transaction analysis ("analyze a transaction for fraud")
+- Real-time monitoring or batch runs ("how do I upload a CSV file?").`;
   };
 
-  const getHelpMessage = () => {
+  const getHelpMessage = (role) => {
+    if (role === 'user') {
+      return `🤖 **How I Can Help You**
+
+I can assist with:
+- 🧾 **Flagged Transactions**: "Why was this transaction flagged?"
+- 📂 **Recent Alerts**: "Show my recent flagged transactions"
+- 🔍 **Transaction Check**: "Check 500 at Amazon for fraud"
+- 🧭 **Navigation**: "Where can I see my past transactions?"
+
+I also understand:
+- Greetings: "Hi", "Hello", "Good morning"
+- Thanks: "Thank you", "Thanks"
+- Goodbyes: "Bye", "See you later"
+
+Just type naturally, and I'll help you understand your account activity. 😊`;
+    }
+
     return `🤖 **How I Can Help You**
 
 I can assist with:
-- 🔍 **Transaction Analysis**: "Check $500 at Amazon for fraud"
+- 🔍 **Transaction Analysis**: "Check ₹500 at Amazon for fraud"
 - 📊 **System Status**: "Is the system healthy?"
 - 📈 **Statistics**: "Show fraud detection stats"
 - 🧭 **Navigation**: "How do I upload a file?"
 - 📁 **File Processing**: "Guide me through batch processing"
 
-**I also understand:**
+I also understand:
 - Greetings: "Hi", "Hello", "Good morning"
 - Thanks: "Thank you", "Thanks", "Appreciate it"
 - Goodbyes: "Bye", "See you later", "Take care"
 
 Just type naturally, and I'll help you out! 😊`;
+  };
+
+  const getWhyFlaggedMessage = (role) => {
+    if (role === 'user') {
+      return `❓ **Why was my transaction flagged?**
+
+The system looks at multiple factors such as amount, merchant risk, time of day, and how this compares to your usual spending pattern.
+
+To see a detailed explanation for a specific transaction:
+1. Open the transaction in your dashboard or Real-Time Monitoring.
+2. Open the detailed view for that transaction.
+3. Review the risk score and the list of top risk factors shown there.`;
+    }
+
+    return `❓ **Why was a transaction flagged?**
+
+The XGBoost + Isolation Forest engine assigns a risk score based on amount, merchant category, time profile, and behaviour features.
+
+Use the detailed transaction view to inspect top risk factors, SHAP-style explanations, and model scores for each flagged case.`;
+  };
+
+  const getRecentFlaggedMessage = (role) => {
+    if (role === 'user') {
+      return `📂 **Recent flagged transactions**
+
+You can see your recent flagged transactions by:
+- Opening Real-Time Monitoring → My Transaction History, then
+- Using the "Fraud Alerts Only" filter.
+
+Only your own transactions are visible to you; internal analyst views remain hidden.`;
+    }
+
+    return `📂 **Recent flagged transactions**
+
+To review recent fraud cases:
+- Use Real-Time Monitoring to watch live fraud alerts and high-risk events.
+- Use Analytics to see fraud trends and high-risk merchants.
+- Use Batch Processing results when you run large offline files through the engine.`;
   };
 
   const sendToUiPath = async (userMessage, botResponse) => {

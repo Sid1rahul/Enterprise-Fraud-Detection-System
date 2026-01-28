@@ -60,6 +60,150 @@
   --transition-slow: 0.5s ease;
 }
 
+/* Light theme overrides (activated when data-theme="light" is set on <html>) */
+:root[data-theme='light'] {
+  /* Light background colors */
+  --bg-primary: #f5f7fb;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #e5ecff;
+  --bg-card: #ffffff;
+  --bg-hover: #eef2ff;
+
+  /* Accent colors - softer blue theme */
+  --accent-primary: #2563eb;
+  --accent-secondary: #1d4ed8;
+  --accent-tertiary: #0f766e;
+  --accent-glow: rgba(37, 99, 235, 0.25);
+
+  /* Text colors */
+  --text-primary: #0f172a;
+  --text-secondary: #1f2937;
+  --text-muted: #6b7280;
+  --text-accent: #2563eb;
+
+  /* Status colors tuned for light bg */
+  --success: #16a34a;
+  --warning: #d97706;
+  --error: #dc2626;
+  --info: #2563eb;
+
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, #e5ecff 0%, #f9fafb 50%, #dbeafe 100%);
+  --gradient-card: linear-gradient(145deg, #ffffff 0%, #e5ecff 100%);
+  --gradient-accent: linear-gradient(135deg, #2563eb 0%, #0ea5e9 100%);
+
+  /* Shadows – slightly softer on light backgrounds */
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.08);
+  --shadow-md: 0 4px 6px rgba(15, 23, 42, 0.12);
+  --shadow-lg: 0 10px 15px rgba(15, 23, 42, 0.18);
+  --shadow-glow: 0 0 18px rgba(37, 99, 235, 0.25);
+}
+
+/* Emerald theme - teal & green on a deep background */
+:root[data-theme='emerald'] {
+  /* Backgrounds */
+  --bg-primary: #020617;
+  --bg-secondary: #022c22;
+  --bg-tertiary: #064e3b;
+  --bg-card: #022c22;
+  --bg-hover: #065f46;
+
+  /* Accents */
+  --accent-primary: #22c55e;
+  --accent-secondary: #16a34a;
+  --accent-tertiary: #0d9488;
+  --accent-glow: rgba(34, 197, 94, 0.3);
+
+  /* Text */
+  --text-primary: #ecfdf5;
+  --text-secondary: #a7f3d0;
+  --text-muted: #6ee7b7;
+  --text-accent: #6ee7b7;
+
+  /* Status */
+  --success: #22c55e;
+  --warning: #eab308;
+  --error: #f97316;
+  --info: #22c55e;
+
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, #020617 0%, #022c22 40%, #064e3b 100%);
+  --gradient-card: linear-gradient(145deg, #022c22 0%, #065f46 100%);
+  --gradient-accent: linear-gradient(135deg, #22c55e 0%, #0d9488 100%);
+
+  /* Shadows */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 10px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 10px 24px rgba(0, 0, 0, 0.7);
+  --shadow-glow: 0 0 20px rgba(34, 197, 94, 0.35);
+}
+
+/* Sunset theme - warm oranges & magenta on dark slate */
+:root[data-theme='sunset'] {
+  --bg-primary: #0b1120;
+  --bg-secondary: #111827;
+  --bg-tertiary: #1f2937;
+  --bg-card: #111827;
+  --bg-hover: #1f2937;
+
+  --accent-primary: #f97316;
+  --accent-secondary: #ec4899;
+  --accent-tertiary: #fb7185;
+  --accent-glow: rgba(249, 115, 22, 0.35);
+
+  --text-primary: #f9fafb;
+  --text-secondary: #e5e7eb;
+  --text-muted: #9ca3af;
+  --text-accent: #fed7aa;
+
+  --success: #22c55e;
+  --warning: #facc15;
+  --error: #ef4444;
+  --info: #38bdf8;
+
+  --gradient-primary: linear-gradient(135deg, #0b1120 0%, #1f2937 40%, #7c2d12 100%);
+  --gradient-card: linear-gradient(145deg, #111827 0%, #7c2d12 100%);
+  --gradient-accent: linear-gradient(135deg, #f97316 0%, #ec4899 100%);
+
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 6px 12px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 12px 28px rgba(0, 0, 0, 0.75);
+  --shadow-glow: 0 0 22px rgba(249, 115, 22, 0.4);
+}
+
+/* Purple theme - deep violet with neon accent */
+:root[data-theme='purple'] {
+  --bg-primary: #08001a;
+  --bg-secondary: #12072f;
+  --bg-tertiary: #1e103d;
+  --bg-card: #1b0f3a;
+  --bg-hover: #2a1854;
+
+  --accent-primary: #a855f7;
+  --accent-secondary: #6366f1;
+  --accent-tertiary: #ec4899;
+  --accent-glow: rgba(168, 85, 247, 0.4);
+
+  --text-primary: #f4f4ff;
+  --text-secondary: #e0e7ff;
+  --text-muted: #9ca3c7;
+  --text-accent: #c4b5fd;
+
+  --success: #34d399;
+  --warning: #eab308;
+  --error: #fb7185;
+  --info: #38bdf8;
+
+  --gradient-primary: linear-gradient(135deg, #050017 0%, #12072f 45%, #4c1d95 100%);
+  --gradient-card: linear-gradient(145deg, #1b0f3a 0%, #4c1d95 100%);
+  --gradient-accent: linear-gradient(135deg, #a855f7 0%, #38bdf8 100%);
+
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 8px 16px rgba(0, 0, 0, 0.7);
+  --shadow-lg: 0 16px 32px rgba(0, 0, 0, 0.85);
+  --shadow-glow: 0 0 26px rgba(168, 85, 247, 0.5);
+}
+
 * {
   margin: 0;
   padding: 0;

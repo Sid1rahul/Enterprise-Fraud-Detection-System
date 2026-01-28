@@ -5,7 +5,6 @@ import {
   TrendingUp, 
   Shield, 
   Clock,
-  DollarSign,
   User,
   MapPin,
   RefreshCw
@@ -29,7 +28,7 @@ const RealtimeActivityFeed = ({ user }) => {
           'Cross-border transaction alert',
           'Multiple failed attempts detected'
         ],
-        amounts: ['$2,500', '$7,800', '$1,200', '$15,000', '$950'],
+        amounts: ['₹2,500', '₹7,800', '₹1,200', '₹15,000', '₹950'],
         priority: 'high'
       },
       model_update: {
@@ -220,7 +219,6 @@ const RealtimeActivityFeed = ({ user }) => {
                   <div className="activity-meta">
                     {activity.amount && (
                       <span className="activity-amount">
-                        <DollarSign size={12} />
                         {activity.amount}
                       </span>
                     )}

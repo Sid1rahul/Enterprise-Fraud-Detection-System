@@ -1,5 +1,6 @@
 import React from 'react';
 import { X, AlertTriangle, CheckCircle, Info, TrendingUp, TrendingDown } from 'lucide-react';
+import { formatCurrencyINR } from '../utils/api';
 import './TransactionDetailsModal.css';
 
 const TransactionDetailsModal = ({ transaction, isOpen, onClose }) => {
@@ -10,7 +11,7 @@ const TransactionDetailsModal = ({ transaction, isOpen, onClose }) => {
     const features = [
       {
         name: 'Transaction Amount',
-        value: `$${transaction.amount}`,
+        value: formatCurrencyINR(transaction.amount),
         impact: transaction.amount > 1000 ? 0.35 : -0.15,
         description: transaction.amount > 1000 ? 'High amount increases fraud risk' : 'Normal amount reduces fraud risk'
       },
@@ -82,7 +83,7 @@ const TransactionDetailsModal = ({ transaction, isOpen, onClose }) => {
             <div className="summary-grid">
               <div className="summary-item">
                 <label>Amount</label>
-                <span className="amount">${transaction.amount?.toFixed(2) || '0.00'}</span>
+                <span className="amount">{formatCurrencyINR(transaction.amount ?? 0)}</span>
               </div>
               <div className="summary-item">
                 <label>Merchant</label>

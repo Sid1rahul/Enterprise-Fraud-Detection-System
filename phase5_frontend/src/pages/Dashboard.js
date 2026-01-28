@@ -6,8 +6,7 @@ import {
   CheckCircle, 
   Activity,
   Users,
-  CreditCard,
-  DollarSign
+  CreditCard
 } from 'lucide-react';
 import { LineChart, Line, AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { fraudAPI } from '../utils/api';
@@ -204,10 +203,10 @@ const Dashboard = ({ user }) => {
           color="var(--success)"
         />
         <StatCard
-          icon={DollarSign}
+          icon={TrendingUp}
           title="Amount Saved"
-          value="$47,230"
-          change="+$12,500 this week"
+          value="₹47,230"
+          change="+₹12,500 this week"
           color="var(--warning)"
         />
       </div>
@@ -345,7 +344,7 @@ const Dashboard = ({ user }) => {
       </div>
       
       {/* UiPath Integrated Chatbot */}
-      <FraudChatbot />
+      <FraudChatbot user={user} />
     </div>
   );
 };

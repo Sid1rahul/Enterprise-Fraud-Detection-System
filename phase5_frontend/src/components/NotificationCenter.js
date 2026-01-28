@@ -26,7 +26,7 @@ const NotificationCenter = ({ user }) => {
         id: 1,
         type: 'fraud_alert',
         title: 'High-Risk Transaction Detected',
-        message: 'Transaction of $7,500 at Casino flagged with 95% fraud probability',
+        message: 'Transaction of ₹7,500 at Casino flagged with 95% fraud probability',
         timestamp: new Date(Date.now() - 5 * 60000).toISOString(),
         isRead: false,
         priority: 'high',
@@ -96,7 +96,7 @@ const NotificationCenter = ({ user }) => {
           type: Math.random() > 0.5 ? 'fraud_alert' : 'system_update',
           title: Math.random() > 0.5 ? 'New Fraud Alert' : 'System Update',
           message: Math.random() > 0.5 
-            ? `Suspicious transaction of $${Math.floor(Math.random() * 5000 + 1000)} detected`
+            ? `Suspicious transaction of ₹${Math.floor(Math.random() * 5000 + 1000)} detected`
             : 'Model retrained with new data batch',
           timestamp: new Date().toISOString(),
           isRead: false,

@@ -3,7 +3,6 @@ import {
   Search, 
   Filter, 
   Calendar,
-  DollarSign,
   MapPin,
   CreditCard,
   AlertTriangle,
@@ -15,6 +14,7 @@ import {
   TrendingDown
 } from 'lucide-react';
 import { generateUserTransactions } from '../utils/dataAccess';
+import { formatCurrencyINR } from '../utils/api';
 import './UserTransactionMonitor.css';
 
 const UserTransactionMonitor = ({ user }) => {
@@ -171,10 +171,7 @@ const UserTransactionMonitor = ({ user }) => {
   };
 
   const formatAmount = (amount) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD'
-    }).format(amount);
+    return formatCurrencyINR(amount);
   };
 
   const formatTimestamp = (timestamp) => {
@@ -231,7 +228,7 @@ const UserTransactionMonitor = ({ user }) => {
         </div>
         <div className="stat-card">
           <div className="stat-icon">
-            <DollarSign size={20} />
+            <CreditCard size={20} />
           </div>
           <div className="stat-content">
             <span className="stat-value">{formatAmount(stats.totalAmount)}</span>
@@ -277,9 +274,9 @@ const UserTransactionMonitor = ({ user }) => {
             onChange={(e) => handleFilterChange('amountRange', e.target.value)}
           >
             <option value="all">All Amounts</option>
-            <option value="small">Under $100</option>
-            <option value="medium">$100 - $500</option>
-            <option value="large">Over $500</option>
+            <option value="small">Under ₹100</option>
+            <option value="medium">₹100 - ₹500</option>
+            <option value="large">Over ₹500</option>
           </select>
 
           <select

@@ -16,7 +16,7 @@ import {
   Shield
 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
-import { fraudAPI } from '../utils/api';
+import { fraudAPI, formatCurrencyINR } from '../utils/api';
 import { hasPermission, PERMISSIONS } from '../utils/dataAccess';
 import UserTransactionMonitor from '../components/UserTransactionMonitor';
 import TransactionDetailsModal from '../components/TransactionDetailsModal';
@@ -45,6 +45,7 @@ const RealTimeMonitoring = ({ user }) => {
   const [showModal, setShowModal] = useState(false);
   const intervalRef = useRef(null);
   const fileInputRef = useRef(null);
+  const isPausedRef = useRef(false);
 
   // Sample transaction data for simulation
   const sampleTransactions = [
@@ -98,6 +99,7 @@ const RealTimeMonitoring = ({ user }) => {
       
       setIsMonitoring(true);
       setIsPaused(false);
+      isPausedRef.current = false;
       setSessionId(response.session_id);
       setTransactions([]);
       setFraudDetections([]);
@@ -109,6 +111,10 @@ const RealTimeMonitoring = ({ user }) => {
       // Start polling for updates
       const currentSessionId = response.session_id;
       intervalRef.current = setInterval(async () => {
+        if (isPausedRef.current) {
+          return;
+        }
+
         try {
           const status = await fraudAPI.getMonitoringStatus(currentSessionId);
           
@@ -140,19 +146,25 @@ const RealTimeMonitoring = ({ user }) => {
               
               return updated;
             });
-          }
-          
-          // Get recent fraud alerts
-          const alerts = await fraudAPI.getFraudAlerts(10);
-          if (alerts.alerts && alerts.alerts.length > 0) {
-            setFraudDetections(alerts.alerts.map(alert => ({
-              id: alert.id,
-              amount: alert.amount,
-              merchant: alert.merchant,
-              customer_id: alert.customer_id || `CUST_${Math.floor(Math.random() * 1000)}`,
-              timestamp: new Date(alert.timestamp),
-              risk_score: alert.risk_score
-            })));
+
+            // If this transaction is fraud, record it in fraudDetections so
+            // the side panel and exported CSV reflect the actual flagged
+            // transactions from this monitoring session.
+            if (newTransaction.isFraud) {
+              setFraudDetections(prev => {
+                const detection = {
+                  id: `ALERT_${newTransaction.id}`,
+                  transaction_id: newTransaction.id,
+                  amount: newTransaction.amount,
+                  merchant: newTransaction.merchant,
+                  customer_id: newTransaction.customer_id,
+                  timestamp: newTransaction.timestamp,
+                  risk_score: newTransaction.risk_score
+                };
+                const updatedFrauds = [detection, ...prev];
+                return updatedFrauds.slice(0, 50);
+              });
+            }
           }
           
           // Stop monitoring if session is completed
@@ -179,15 +191,14 @@ const RealTimeMonitoring = ({ user }) => {
       const action = isPaused ? 'resume' : 'pause';
       await fraudAPI.controlMonitoring(sessionId, action);
       
-      setIsPaused(!isPaused);
-      
-      if (isPaused) {
-        // Resume - restart polling
-        toast.success('Monitoring resumed');
-        // Restart the interval if needed
-      } else {
-        // Pause - keep polling but show paused state
+      if (action === 'pause') {
+        setIsPaused(true);
+        isPausedRef.current = true;
         toast.success('Monitoring paused');
+      } else {
+        setIsPaused(false);
+        isPausedRef.current = false;
+        toast.success('Monitoring resumed');
       }
     } catch (error) {
       toast.error(`Failed to ${isPaused ? 'resume' : 'pause'} monitoring: ${error.message}`);
@@ -219,9 +230,10 @@ const RealTimeMonitoring = ({ user }) => {
     }
     
     const csvContent = [
-      ['Transaction ID', 'Amount', 'Merchant', 'Customer ID', 'Risk Score', 'Timestamp'],
+      ['Alert ID', 'Transaction ID', 'Amount', 'Merchant', 'Customer ID', 'Risk Score', 'Timestamp'],
       ...fraudDetections.map(t => [
         t.id,
+        t.transaction_id || '',
         t.amount.toFixed(2),
         t.merchant,
         t.customer_id,
@@ -450,7 +462,7 @@ const RealTimeMonitoring = ({ user }) => {
                 
                 <div className="transaction-details">
                   <div className="transaction-main">
-                    <span className="amount">${transaction.amount.toFixed(2)}</span>
+                    <span className="amount">{formatCurrencyINR(transaction.amount)}</span>
                     <span className="merchant">{transaction.merchant}</span>
                   </div>
                   <div className="transaction-meta">
@@ -490,7 +502,7 @@ const RealTimeMonitoring = ({ user }) => {
                 <AlertTriangle className="alert-icon" />
                 <div className="alert-content">
                   <div className="alert-main">
-                    <strong>${fraud.amount.toFixed(2)}</strong> at {fraud.merchant}
+                    <strong>{formatCurrencyINR(fraud.amount)}</strong> at {fraud.merchant}
                   </div>
                   <div className="alert-meta">
                     {fraud.customer_id} • Risk: {(fraud.risk_score * 100).toFixed(1)}%

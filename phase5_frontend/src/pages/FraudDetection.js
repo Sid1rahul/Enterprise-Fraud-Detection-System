@@ -5,7 +5,6 @@ import {
   AlertTriangle, 
   CheckCircle, 
   Clock,
-  DollarSign,
   MapPin,
   User,
   Zap,
@@ -15,7 +14,7 @@ import {
   Play
 } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { fraudAPI, formatTransactionData, interpretPrediction, getRiskLevelBadge, generateMockTransaction } from '../utils/api';
+import { fraudAPI, formatTransactionData, interpretPrediction, getRiskLevelBadge, generateMockTransaction, formatCurrencyINR } from '../utils/api';
 import './FraudDetection.css';
 
 const FraudDetection = () => {
@@ -215,7 +214,7 @@ const FraudDetection = () => {
             <div className="form-row">
               <div className="form-group">
                 <label className="form-label">
-                  <DollarSign size={16} />
+                  <CreditCard size={16} />
                   Transaction Amount *
                 </label>
                 <input
@@ -376,7 +375,7 @@ const FraudDetection = () => {
               <div className="form-row">
                 <div className="form-group">
                   <label className="form-label">
-                    <DollarSign size={16} />
+                    <CreditCard size={16} />
                     Amount Range
                   </label>
                   <div className="range-inputs">
@@ -496,7 +495,7 @@ const FraudDetection = () => {
                 <div key={index} className={`range-result-item ${result.prediction}`}>
                   <div className="result-info">
                     <div className="result-main">
-                      <span className="amount">${result.amount.toFixed(2)}</span>
+                      <span className="amount">{formatCurrencyINR(result.amount)}</span>
                       <span className="merchant">{result.merchant}</span>
                       <span className="customer">{result.customer_id}</span>
                     </div>
@@ -633,7 +632,7 @@ const FraudDetection = () => {
                     </div>
                     <div className="history-details">
                       <span className="history-merchant">{item.transaction.merchant}</span>
-                      <span className="history-amount">${item.transaction.amount}</span>
+                      <span className="history-amount">{formatCurrencyINR(item.transaction.amount)}</span>
                     </div>
                     <div className="history-meta">
                       <span className={`history-risk ${getRiskLevelBadge(item.result.risk_level)}`}>

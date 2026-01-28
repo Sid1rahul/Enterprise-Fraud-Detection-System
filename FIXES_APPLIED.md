@@ -282,6 +282,124 @@ FraudDetectionAutomation execution ended in: 00:02:30
 
 ---
 
+## 🌐 New Frontend Enhancements (Chatbot, INR, Themes)
+
+### 1️⃣ Role-Specific Chatbot Behavior (Customer vs. Admin)
+
+**Files Updated:**
+- `phase5_frontend/src/components/FraudChatbot.js`
+- `phase5_frontend/src/pages/Dashboard.js`
+
+**Changes:**
+- `FraudChatbot` now accepts a `user` prop and adapts its behavior based on the logged-in user role.
+- For **customers** (`role: 'user'`):
+  - Welcome suggestions focus on personal help:
+    - *"Why was this transaction flagged?"*
+    - *"Show my recent flagged transactions"*
+    - *"Show my transactions"*
+  - New intents added:
+    - **why_flagged** → Explains, in plain language, why a transaction might be flagged and guides the user to the detailed SHAP-style explanation view.
+    - **recent_flagged** → Explains how to see recent flagged transactions via Real-Time Monitoring → *My Transaction History* with the **Fraud Alerts Only** filter.
+  - Help text is simplified and written from a **customer perspective**, focusing on understanding their own account activity.
+
+- For **admins/analysts**:
+  - Existing advanced options are preserved:
+    - System health
+    - Transaction analysis
+    - Fraud statistics
+    - Batch/file processing guidance
+  - Help text still advertises advanced capabilities (system status, fraud stats, batch processing, navigation across pages).
+- All other intents (greeting, gratitude, farewell, navigation, statistics, etc.) continue to work as before but now return **role-appropriate suggestions** after each reply.
+
+**Impact:**
+- Customers see a **simplified, focused assistant** that only talks about their own transactions and why items were flagged.
+- Admins/analysts keep a **full control panel style assistant** for system-level monitoring and analysis, without exposing internal tools to end customers.
+
+---
+
+### 2️⃣ Currency Localization to Indian Rupees (INR)
+
+**New Helper:**
+- `phase5_frontend/src/utils/api.js`
+  - Added `formatCurrencyINR(amount)` which uses:
+    - `Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' })`
+  - Handles strings/numbers safely and falls back to `₹0.00` for invalid input.
+
+**Key UI Components Updated:**
+- `Dashboard.js`
+  - Summary card **"Amount Saved"** now displays values as `₹47,230` and `+₹12,500 this week`.
+- `UserTransactionMonitor.js`
+  - All transaction amounts and stats now use `formatCurrencyINR`.
+  - Amount range filter labels updated from USD to INR:
+    - *"Under ₹100"*, *"₹100 - ₹500"*, *"Over ₹500"*.
+- `RealTimeMonitoring.js`
+  - Live stream transaction amount and the **Recent Fraud Alerts** panel now display amounts in INR via `formatCurrencyINR`.
+- `BatchProcessing.js`
+  - Batch results table now shows transaction amounts in INR using `formatCurrencyINR`.
+- `TransactionDetailsModal.js`
+  - The main **Amount** field and the feature importance **"Transaction Amount"** value now show INR values using the shared helper, keeping SHAP-style reasoning unchanged.
+- `FraudDetection.js`
+  - Range analysis results and the **Recent Analyses** history panel now format amounts with `formatCurrencyINR`.
+- `RealtimeActivityFeed.js` and `NotificationCenter.js`
+  - Hard-coded sample alert amounts changed from `$…` to `₹…` to match the localized UI.
+- `FraudChatbot.js`
+  - Transaction analysis replies now show `💰 Amount` via `formatCurrencyINR` instead of `$…`.
+  - Help text examples updated to reference `₹500` instead of `$500`.
+
+**Impact:**
+- All user-facing transaction and monetary displays in the **React frontend** are now consistently shown in **Indian Rupees (₹)**.
+- Backend APIs and numerical logic remain unchanged; only presentation and examples are localized.
+
+---
+
+### 3️⃣ Additional Color Themes (Beyond Dark Aqua & Light)
+
+**Files Updated:**
+- `phase5_frontend/src/index.css`
+- `phase5_frontend/src/pages/Settings.js`
+- `phase5_frontend/src/App.js`
+
+**New Themes (CSS Variables):**
+- Added three fully defined themes using `:root[data-theme='…']` blocks:
+  1. **emerald** – Teal/green security-style dashboard
+     - Deep, almost-black teal background
+     - Strong green accent (`#22c55e`) with aqua secondary tones
+     - Tuned success/warning/error colors and gradients
+  2. **sunset** – Warm orange/magenta on dark slate
+     - Dark navy / slate background
+     - Orange + pink accents (`#f97316`, `#ec4899`)
+     - High-contrast glow and shadows suited to alert-heavy dashboards
+  3. **purple** – Deep violet with neon accent
+     - Dark violet background layers
+     - Purple + blue accents (`#a855f7`, `#6366f1`)
+     - Brighter text and pronounced glow to highlight charts and KPIs
+
+**Theme Selection & Persistence:**
+- `Settings.js`
+  - `applyTheme` now recognises named themes: `light`, `emerald`, `sunset`, `purple`.
+  - Theme dropdown extended with:
+    - *Emerald (Teal Green)*
+    - *Sunset (Warm)*
+    - *Purple (Violet)*
+    - *Auto (Match System)*
+  - Still persists all settings to `localStorage` key `fraudDetectionSettings` (including `theme`).
+- `App.js`
+  - On startup, reads `fraudDetectionSettings.theme` and applies:
+    - `data-theme="light|emerald|sunset|purple"` for named themes.
+    - `auto` uses system dark/light via `prefers-color-scheme`.
+    - Default: dark aqua theme (no `data-theme` attribute).
+
+**Impact:**
+- Users can now switch between **five** visual modes:
+  - Dark (Aqua Blue, default)
+  - Light
+  - Emerald
+  - Sunset
+  - Purple
+- The chosen theme is **remembered across sessions** via `localStorage` and applied both in `Settings` and on app load in `App.js`.
+
+---
+
 ## 🔗 Related Documentation
 
 - **SETUP_GUIDE.md** - Complete setup instructions

@@ -165,6 +165,22 @@ export const getRiskLevelBadge = (riskLevel) => {
   return badges[riskLevel] || 'badge-info';
 };
 
+// Currency formatting helper for Indian Rupees (INR)
+export const formatCurrencyINR = (amount) => {
+  const numericAmount = typeof amount === 'string' ? parseFloat(amount) : amount;
+
+  if (numericAmount == null || isNaN(numericAmount)) {
+    return '₹0.00';
+  }
+
+  return new Intl.NumberFormat('en-IN', {
+    style: 'currency',
+    currency: 'INR',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(numericAmount);
+};
+
 // Prediction interpretation
 export const interpretPrediction = (prediction) => {
   const interpretations = {

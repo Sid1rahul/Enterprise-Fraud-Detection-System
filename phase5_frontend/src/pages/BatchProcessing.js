@@ -16,7 +16,7 @@ import {
   Shield
 } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { fraudAPI, formatBatchData, generateMockBatch, getRiskLevelBadge } from '../utils/api';
+import { fraudAPI, formatBatchData, generateMockBatch, getRiskLevelBadge, formatCurrencyINR } from '../utils/api';
 import { hasPermission, PERMISSIONS } from '../utils/dataAccess';
 import UserTransactionMonitor from '../components/UserTransactionMonitor';
 import './BatchProcessing.css';
@@ -407,7 +407,7 @@ const BatchProcessing = ({ user }) => {
                     <div className="result-number">{index + 1}</div>
                     <div className="result-transaction">
                       <div className="transaction-merchant">{transaction?.merchant || 'Unknown'}</div>
-                      <div className="transaction-amount">${transaction?.amount || '0.00'}</div>
+                      <div className="transaction-amount">{formatCurrencyINR(transaction?.amount || 0)}</div>
                     </div>
                     <div className="result-probability">
                       <div className="probability-bar-small">

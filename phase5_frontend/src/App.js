@@ -16,6 +16,41 @@ function App() {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  const applyTheme = (theme) => {
+    if (typeof document === 'undefined') return;
+    const root = document.documentElement;
+    const namedThemes = ['light', 'emerald', 'sunset', 'purple'];
+    if (namedThemes.includes(theme)) {
+      root.setAttribute('data-theme', theme);
+    } else if (theme === 'auto') {
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        root.removeAttribute('data-theme');
+      } else {
+        root.setAttribute('data-theme', 'light');
+      }
+    } else {
+      // Default to dark theme (no explicit data-theme attribute)
+      root.removeAttribute('data-theme');
+    }
+  };
+
+  useEffect(() => {
+    // Apply persisted theme on initial load
+    try {
+      const savedSettings = localStorage.getItem('fraudDetectionSettings');
+      if (savedSettings) {
+        const parsed = JSON.parse(savedSettings);
+        if (parsed && parsed.theme) {
+          applyTheme(parsed.theme);
+          return;
+        }
+      }
+    } catch (error) {
+      // Ignore and fall back to default
+    }
+    applyTheme('dark');
+  }, []);
+
   useEffect(() => {
     // Check for existing session
     const savedUser = localStorage.getItem('fraudDetectionUser');

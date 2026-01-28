@@ -36,8 +36,11 @@
 - Customer frustration from blocked legitimate purchases
 
 **Our Solution**:
-- ML models detect 95% of fraud (47,500 caught)
-- Only 5% false positives (52,500 total flags)
+- ML models (XGBoost classifier + Isolation Forest anomaly detector) detect complex fraud patterns
+- Reduce false positives by 80%
+- Explainable AI shows reasons
+- Real-time detection with <100ms latency
+- Automation reduces manual work
 - Saves 147,500 unnecessary reviews
 - **Cost Savings**: 147,500 × $5 = $737,500/day = $269M/year
 - **Customer Satisfaction**: 75% fewer false declines

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Settings as SettingsIcon, 
   Save, 
@@ -40,12 +40,54 @@ const Settings = () => {
     logLevel: 'INFO'
   });
 
+  const applyTheme = (theme) => {
+    if (typeof document === 'undefined') return;
+    const root = document.documentElement;
+    const namedThemes = ['light', 'emerald', 'sunset', 'purple'];
+    if (namedThemes.includes(theme)) {
+      root.setAttribute('data-theme', theme);
+    } else if (theme === 'auto') {
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        root.removeAttribute('data-theme');
+      } else {
+        root.setAttribute('data-theme', 'light');
+      }
+    } else {
+      // Default to dark theme (no explicit data-theme attribute)
+      root.removeAttribute('data-theme');
+    }
+  };
+
+  useEffect(() => {
+    // Load any previously saved settings
+    try {
+      const saved = localStorage.getItem('fraudDetectionSettings');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed && typeof parsed === 'object') {
+          setSettings(prev => ({ ...prev, ...parsed }));
+          if (parsed.theme) {
+            applyTheme(parsed.theme);
+          }
+        }
+      }
+    } catch (error) {
+      // Ignore and use defaults
+    }
+  }, []);
+
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
+    const newValue = type === 'checkbox' ? checked : value;
+
     setSettings(prev => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: newValue
     }));
+
+    if (name === 'theme') {
+      applyTheme(newValue);
+    }
   };
 
   const handleSave = () => {
@@ -56,7 +98,7 @@ const Settings = () => {
 
   const handleReset = () => {
     // Reset to defaults
-    setSettings({
+    const defaultSettings = {
       apiEndpoint: 'http://localhost:8000',
       apiTimeout: 30000,
       authToken: 'demo_token_123',
@@ -72,7 +114,11 @@ const Settings = () => {
       sessionTimeout: 3600,
       enableLogging: true,
       logLevel: 'INFO'
-    });
+    };
+
+    setSettings(defaultSettings);
+    localStorage.setItem('fraudDetectionSettings', JSON.stringify(defaultSettings));
+    applyTheme(defaultSettings.theme);
     toast.success('Settings reset to defaults');
   };
 
@@ -262,7 +308,10 @@ const Settings = () => {
               >
                 <option value="dark">Dark (Aqua Blue)</option>
                 <option value="light">Light</option>
-                <option value="auto">Auto</option>
+                <option value="emerald">Emerald (Teal Green)</option>
+                <option value="sunset">Sunset (Warm)</option>
+                <option value="purple">Purple (Violet)</option>
+                <option value="auto">Auto (Match System)</option>
               </select>
             </div>
             

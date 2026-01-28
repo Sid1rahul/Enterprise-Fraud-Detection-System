@@ -37,11 +37,11 @@ This is a **complete fraud detection system** that:
 └─────────────┘      └─────────────┘      └─────────────┘
        │                     │                     │
        ▼                     ▼                     ▼
-  User Interface        ML Models            Automation
-  - Dashboard          - XGBoost            - Testing
-  - Analytics          - Random Forest      - Reports
-  - Monitoring         - Neural Net         - Workflows
-  - Chatbot            - Ensemble
+  User Interface        ML Engine            Automation
+  - Dashboard           - XGBoost classifier - Testing
+  - Analytics           - Isolation Forest   - Reports
+  - Monitoring          - Random Forest demo - Workflows
+  - Chatbot             - SHAP/LIME XAI
 ```
 
 ---
@@ -79,10 +79,11 @@ This is a **complete fraud detection system** that:
 
 ```
 CFD/
-├── phase1_data_foundation/          # Backend
-│   ├── flask_server.py             # Main Flask app
-│   ├── fraud_detection_model.py    # ML models
-│   └── requirements.txt            # Python deps
+├── phase1_data_foundation/          # Backend + ML pipeline
+│   ├── flask_server.py             # Flask API for demo & integration
+│   ├── main.py                     # Phase 1 training & evaluation pipeline
+│   ├── simple_demo.py              # Lightweight RandomForest + IsolationForest demo
+│   └── src/                        # Data processing, models, explainability (xgboost_model.py, isolation_forest.py, explainability.py, etc.)
 │
 ├── phase5_frontend/                # Frontend
 │   ├── src/
@@ -117,18 +118,25 @@ CFD/
 ### 1. Flask Backend (`flask_server.py`)
 
 **Main Endpoints**:
-- `POST /api/predict` - Predict fraud for single transaction
-- `POST /api/predict_batch` - Batch fraud detection
-- `POST /api/upload` - File upload (CSV/Excel)
-- `GET /api/transactions` - Get recent transactions
+- `GET /health`, `GET /api/health` - API health checks
+- `GET /api/models/status` - Loaded model information (e.g. XGBoost, Isolation Forest)
+- `POST /api/fraud/predict` - Predict fraud for a single transaction
+- `POST /api/fraud/predict/batch` - Batch fraud detection
+- `POST /api/upload/file` - File upload (CSV)
+- `GET /api/transactions` - Sample transactions for demo
+- `POST /api/monitoring/start` / `GET /api/monitoring/status/<session_id>` - Real-time monitoring simulation
+- `POST /api/monitoring/control/<session_id>` - Pause/resume/stop monitoring session
+- `GET /api/monitoring/alerts` / `GET /api/monitoring/sessions` - Recent alerts & sessions
 - `POST /api/chatbot` - Chatbot interaction
-- `GET /health` - Health check
 
-**ML Models**:
-- XGBoost Classifier
-- Random Forest Classifier
-- Neural Network (MLP)
-- Ensemble (voting/averaging)
+> Note: In this repository, `flask_server.py` exposes a lightweight, fast demo API. The
+> full XGBoost/Isolation Forest training and evaluation pipeline lives in `main.py`
+> and `src/models/` and can be wired into the API for production-grade serving.
+
+**ML Models (as implemented in the ML pipeline)**:
+- `XGBoostFraudDetector` (supervised classifier)
+- `IsolationForestFraudDetector` (unsupervised anomaly detector)
+- `RandomForestClassifier` demo model (in `simple_demo.py`)
 
 **Features Analyzed**:
 - Transaction amount
@@ -244,7 +252,7 @@ npm start
 ## ML Model Details
 
 ### Training
-- Dataset: Credit card transactions (balanced with SMOTE)
+- Dataset: Credit card transactions (class-imbalance handled via ADASYN/SMOTE)
 - Features: 30+ transaction attributes
 - Train/Test Split: 80/20
 - Cross-validation: 5-fold
@@ -257,10 +265,9 @@ npm start
 - Response Time: <100ms
 
 ### Models Used
-1. **XGBoost**: Best for imbalanced data
-2. **Random Forest**: Robust ensemble
-3. **Neural Network**: Deep learning approach
-4. **Ensemble**: Combines all three
+1. **XGBoost** – supervised fraud classifier (Phase 1 pipeline, `xgboost_model.py`)
+2. **Isolation Forest** – unsupervised anomaly detector (Phase 1 pipeline, `isolation_forest.py`)
+3. **Random Forest** – lightweight demo model (`simple_demo.py`)
 
 ---
 
@@ -279,7 +286,7 @@ npm start
 - Add new responses
 
 ### Updating ML Model
-- File: `phase1_data_foundation/fraud_detection_model.py`
+- Files: `phase1_data_foundation/main.py`, `phase1_data_foundation/src/models/`
 - Retrain with new data
 - Update feature engineering
 - Test accuracy
@@ -410,7 +417,7 @@ cd phase5_frontend && npm start
 
 ### Key Files to Modify
 - Backend API: `phase1_data_foundation/flask_server.py`
-- ML Models: `phase1_data_foundation/fraud_detection_model.py`
+- ML Pipeline & Models: `phase1_data_foundation/main.py`, `phase1_data_foundation/src/models/`
 - Chatbot: `phase5_frontend/src/components/FraudChatbot.js`
 - Dashboard: `phase5_frontend/src/pages/Dashboard.js`
 - UiPath: `UiPath_FraudDetection_Project/FraudDetectionAutomation/Main.xaml`
